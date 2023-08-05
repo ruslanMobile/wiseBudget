@@ -1,4 +1,4 @@
-package com.finance.wisebudget.ui.theme
+package com.finance.presentation.ui.theme
 
 import android.app.Activity
 import android.os.Build
