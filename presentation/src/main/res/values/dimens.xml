@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="text_14">14.sp</dimen>
+    <dimen name="text_16">16.sp</dimen>
+    <dimen name="text_40">40.sp</dimen>
+
+    <dimen name="offset_1">1.dp</dimen>
+    <dimen name="offset_2">2.dp</dimen>
+    <dimen name="offset_4">4.dp</dimen>
+    <dimen name="offset_12">12.dp</dimen>
+    <dimen name="offset_16">16.dp</dimen>
+    <dimen name="offset_26">26.dp</dimen>
+    <dimen name="offset_32">32.dp</dimen>
+    <dimen name="offset_50">50.dp</dimen>
+    <dimen name="offset_56">56.dp</dimen>
+    <dimen name="offset_62">62.dp</dimen>
+</resources>

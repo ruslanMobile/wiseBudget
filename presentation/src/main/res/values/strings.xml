@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="title_app_name">Wise budget</string>
+
+    <string name="text_first_screen_message">Master your finances with Wise Budget. Your journey to financial well-being begins now.</string>
+
+    <string name="label_or_continue_with">Or continue with</string>
+
+    <string name="btn_login">login</string>
+    <string name="btn_sign_up">sign up</string>
+</resources>
