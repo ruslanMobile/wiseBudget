@@ -128,7 +128,9 @@ fun LogInOrSignUpScreen(
                 }
 
                 OutlinedButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        navController.navigate("sign_up")
+                    },
                     border = BorderStroke(dimensionResource(id = R.dimen.offset_2), Silver),
                     modifier = Modifier
                         .fillMaxWidth(0.85f),

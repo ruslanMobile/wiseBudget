@@ -1,7 +1,6 @@
-package com.finance.presentation.ui.login
+package com.finance.presentation.ui.sign_up
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,23 +8,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,14 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
@@ -48,14 +34,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.finance.presentation.R
 import com.finance.presentation.ui.custom_ui.BasicAuthTextField
+import com.finance.presentation.ui.login.LoginVM
 import com.finance.presentation.ui.theme.GreenDark
 import com.finance.presentation.ui.theme.GreenDark2
 import com.finance.presentation.ui.theme.Silver
 import com.finance.presentation.utils.fontDimensionResource
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun LoginScreen(
+fun SignUpScreen(
     navController: NavHostController,
     viewModel: LoginVM = hiltViewModel()
 ) {
@@ -65,6 +51,10 @@ fun LoginScreen(
     }
 
     val passwordState = remember {
+        mutableStateOf("")
+    }
+
+    val repeatPasswordState = remember {
         mutableStateOf("")
     }
 
@@ -91,7 +81,7 @@ fun LoginScreen(
             ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(0.8f),
-                    text = stringResource(id = R.string.title_welcome_back),
+                    text = stringResource(id = R.string.title_register),
                     style = TextStyle(
                         fontSize = fontDimensionResource(id = R.dimen.text_40),
                         color = Color.White,
@@ -102,7 +92,7 @@ fun LoginScreen(
 
                 Text(
                     modifier = Modifier.fillMaxWidth(0.8f),
-                    text = stringResource(id = R.string.label_login_to_your_account),
+                    text = stringResource(id = R.string.label_create_your_account),
                     style = TextStyle(
                         fontSize = fontDimensionResource(id = R.dimen.text_16),
                         color = Color.White,
@@ -121,9 +111,18 @@ fun LoginScreen(
                 BasicAuthTextField(
                     state = passwordState,
                     startIcon = R.drawable.ic_password,
-                    modifier = Modifier.padding(0.dp, dimensionResource(id = R.dimen.offset_26)),
+                    modifier = Modifier.padding(top = dimensionResource(id = R.dimen.offset_26)),
                     hintText = R.string.hint_password,
                     borderBrush = Brush.horizontalGradient(listOf(Silver, GreenDark2)),
+                    visualTransformation = PasswordVisualTransformation()
+                )
+
+                BasicAuthTextField(
+                    state = repeatPasswordState,
+                    startIcon = R.drawable.ic_password,
+                    modifier = Modifier.padding(top = dimensionResource(id = R.dimen.offset_26)),
+                    hintText = R.string.hint_repeat_password,
+                    borderBrush = Brush.horizontalGradient(listOf(GreenDark2, Silver)),
                     visualTransformation = PasswordVisualTransformation()
                 )
             }
@@ -144,7 +143,7 @@ fun LoginScreen(
                         .fillMaxWidth(0.85f)
                 ) {
                     Text(
-                        text = stringResource(id = R.string.btn_login).uppercase(),
+                        text = stringResource(id = R.string.btn_register).uppercase(),
                         style = TextStyle(
                             fontSize = fontDimensionResource(id = R.dimen.text_16),
                             fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
@@ -157,7 +156,7 @@ fun LoginScreen(
                     modifier = Modifier.padding(top = dimensionResource(id = R.dimen.offset_8))
                 ) {
                     Text(
-                        text = stringResource(id = R.string.label_dont_have_an_account),
+                        text = stringResource(id = R.string.label_already_have_an_account),
                         style = TextStyle(
                             fontSize = fontDimensionResource(id = R.dimen.text_12),
                             fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
@@ -165,7 +164,7 @@ fun LoginScreen(
                     )
                     ClickableText(
                         modifier = Modifier.padding(start = dimensionResource(id = R.dimen.offset_4)),
-                        text = AnnotatedString(stringResource(id = R.string.btn_Sign_up)),
+                        text = AnnotatedString(stringResource(id = R.string.btn_Login)),
                         style = TextStyle(
                             fontSize = fontDimensionResource(id = R.dimen.text_12),
                             fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
@@ -173,7 +172,7 @@ fun LoginScreen(
                             color = Color.White
                         ),
                         onClick = {
-                            navController.navigate("sign_up")
+                            navController.navigate("login")
                         }
                     )
                 }

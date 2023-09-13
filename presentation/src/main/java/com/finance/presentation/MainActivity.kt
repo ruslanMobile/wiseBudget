@@ -11,6 +11,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.finance.presentation.ui.login.LoginScreen
 import com.finance.presentation.ui.login_or_signup.LogInOrSignUpScreen
+import com.finance.presentation.ui.sign_up.SignUpScreen
 import com.finance.presentation.ui.theme.WiseBudgetTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -29,7 +30,10 @@ class MainActivity : ComponentActivity() {
                             LogInOrSignUpScreen(navController, hiltViewModel(viewModelStoreOwner = this@MainActivity))
                         }
                         composable("login") {
-                            LoginScreen(hiltViewModel(viewModelStoreOwner = this@MainActivity))
+                            LoginScreen(navController, hiltViewModel(viewModelStoreOwner = this@MainActivity))
+                        }
+                        composable("sign_up") {
+                            SignUpScreen(navController, hiltViewModel(viewModelStoreOwner = this@MainActivity))
                         }
                     }
                 }

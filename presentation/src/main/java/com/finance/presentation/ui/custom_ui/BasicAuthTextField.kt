@@ -19,6 +19,8 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.finance.presentation.R
 import com.finance.presentation.ui.theme.GreenDark2
@@ -31,7 +33,8 @@ fun BasicAuthTextField(
     startIcon: Int,
     modifier: Modifier,
     hintText: Int,
-    borderBrush: Brush
+    borderBrush: Brush,
+    visualTransformation: VisualTransformation = VisualTransformation.None
 ) {
     BasicTextField(
         value = state.value,
@@ -40,6 +43,7 @@ fun BasicAuthTextField(
         cursorBrush = Brush.verticalGradient(
             listOf(Color.White, Color.White)
         ),
+        visualTransformation = visualTransformation,
         textStyle = TextStyle(color = Color.White, fontSize = fontDimensionResource(id = R.dimen.text_16)),
         decorationBox = { innerTextField ->
             Row(
