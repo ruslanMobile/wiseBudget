@@ -38,6 +38,8 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.finance.presentation.R
 import com.finance.presentation.ui.theme.GreenDark
 import com.finance.presentation.ui.theme.GreenDark2
@@ -46,7 +48,8 @@ import com.finance.presentation.utils.fontDimensionResource
 
 @Composable
 fun LogInOrSignUpScreen(
-
+    navController: NavHostController,
+    viewModel: LogInOrSignUpVM = hiltViewModel()
 ) {
     Surface(
         modifier = Modifier.fillMaxSize()
@@ -103,7 +106,9 @@ fun LogInOrSignUpScreen(
                 )
 
                 Button(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        navController.navigate("login")
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Silver,
                         contentColor = GreenDark
