@@ -1,5 +1,6 @@
 package com.finance.presentation.ui.sign_up
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -14,6 +15,8 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -39,11 +42,13 @@ import com.finance.presentation.ui.theme.GreenDark
 import com.finance.presentation.ui.theme.GreenDark2
 import com.finance.presentation.ui.theme.Silver
 import com.finance.presentation.utils.fontDimensionResource
+import com.finance.presentation.utils.requestNotCheckError
+import kotlinx.coroutines.flow.collect
 
 @Composable
 fun SignUpScreen(
     navController: NavHostController,
-    viewModel: LoginVM = hiltViewModel()
+    viewModel: SignUpVM = hiltViewModel()
 ) {
 
     val usernameState = remember {
@@ -134,7 +139,9 @@ fun SignUpScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Button(
-                    onClick = {},
+                    onClick = {
+                        viewModel.signUpWithEmail(usernameState.value, passwordState.value)
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Silver,
                         contentColor = GreenDark
@@ -179,4 +186,11 @@ fun SignUpScreen(
             }
         }
     }
+
+
+    LaunchedEffect(key1 = true, block = {
+        viewModel._signUpState.collect{
+            Log.e("MyLog","IT: $it")
+        }
+    })
 }
