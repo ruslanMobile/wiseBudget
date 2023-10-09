@@ -36,6 +36,12 @@ class MainActivity : ComponentActivity() {
                             SignUpScreen(navController, hiltViewModel(viewModelStoreOwner = this@MainActivity))
                         }
                     }
+
+                    navigation(route = "mainLogic", startDestination = "fer") {
+                        composable("fer") {
+                            LogInOrSignUpScreen(navController, hiltViewModel(viewModelStoreOwner = this@MainActivity))
+                        }
+                    }
                 }
             }
         }

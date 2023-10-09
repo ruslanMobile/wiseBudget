@@ -25,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -46,6 +47,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.finance.domain.repository.LoginState
 import com.finance.presentation.R
 import com.finance.presentation.ui.custom_ui.BasicAuthTextField
 import com.finance.presentation.ui.theme.GreenDark
@@ -135,7 +137,9 @@ fun LoginScreen(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 Button(
-                    onClick = {},
+                    onClick = {
+                        viewModel.loginWithEmail(usernameState.value, passwordState.value)
+                    },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Silver,
                         contentColor = GreenDark
@@ -180,4 +184,13 @@ fun LoginScreen(
             }
         }
     }
+
+    LaunchedEffect(key1 = true, block = {
+        viewModel._loginUpState.collect { loginState ->
+            when (loginState) {
+                LoginState.SuccessLogin -> navController.navigate("fer")
+                else -> {}
+            }
+        }
+    })
 }

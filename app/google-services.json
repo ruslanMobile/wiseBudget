@@ -12,7 +12,20 @@
           "package_name": "com.finance.wisebudget"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "492742405410-oq29uprgm8d9n2vg7bujakkh1pto3h81.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.finance.wisebudget",
+            "certificate_hash": "6d00b46ebcf92bd7522d711b4f3775ced5487d20"
+          }
+        },
+        {
+          "client_id": "492742405410-nrg7q0gd55gm02r43o1pe6vpip2e4rli.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBUUiRMw5HN9d-jujcHtHd2aypeuoJXSII"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "492742405410-nrg7q0gd55gm02r43o1pe6vpip2e4rli.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

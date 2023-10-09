@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.finance.domain.repository.SignedState
 import com.finance.presentation.R
 import com.finance.presentation.ui.custom_ui.BasicAuthTextField
 import com.finance.presentation.ui.login.LoginVM
@@ -189,8 +190,12 @@ fun SignUpScreen(
 
 
     LaunchedEffect(key1 = true, block = {
-        viewModel._signUpState.collect{
-            Log.e("MyLog","IT: $it")
+        viewModel._signUpState.collect{ signUpState ->
+            Log.e("MyLog","IT: $signUpState")
+            when(signUpState){
+                SignedState.SuccessSignUp ->navController.navigate("fer")
+                else -> {}
+            }
         }
     })
 }

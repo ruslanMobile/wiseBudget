@@ -21,4 +21,6 @@
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
     <string name="hint_repeat_password">Repeat password</string>
+
+    <string name="default_web_client_id">492742405410-nrg7q0gd55gm02r43o1pe6vpip2e4rli.apps.googleusercontent.com</string>
 </resources>

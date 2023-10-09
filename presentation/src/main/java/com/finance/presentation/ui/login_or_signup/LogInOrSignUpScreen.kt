@@ -1,5 +1,8 @@
 package com.finance.presentation.ui.login_or_signup
 
+import android.app.Activity
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -22,6 +25,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -40,17 +44,35 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.finance.domain.repository.LoginState
 import com.finance.presentation.R
 import com.finance.presentation.ui.theme.GreenDark
 import com.finance.presentation.ui.theme.GreenDark2
 import com.finance.presentation.ui.theme.Silver
 import com.finance.presentation.utils.fontDimensionResource
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.common.api.ApiException
 
 @Composable
 fun LogInOrSignUpScreen(
     navController: NavHostController,
     viewModel: LogInOrSignUpVM = hiltViewModel()
 ) {
+
+    val authResultLauncher =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val intent = result.data
+                if (result.data != null) {
+                    val task = GoogleSignIn.getSignedInAccountFromIntent(intent)
+                        .getResult(ApiException::class.java)
+                    if (task != null) {
+                        viewModel.authenticationWithGoogle(task.idToken)
+                    }
+                }
+            }
+        }
+
     Surface(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -180,7 +202,9 @@ fun LogInOrSignUpScreen(
                 }
 
                 IconButton(
-                    onClick = { /*TODO*/ },
+                    onClick = {
+                        authResultLauncher.launch(viewModel.getGoogleSignInClient().signInIntent)
+                    },
                     modifier = Modifier
                         .padding(0.dp, dimensionResource(id = R.dimen.offset_26), 0.dp, 0.dp)
                         .size(dimensionResource(id = R.dimen.offset_56))
@@ -198,4 +222,13 @@ fun LogInOrSignUpScreen(
             }
         }
     }
+
+    LaunchedEffect(key1 = true, block = {
+        viewModel._loginUpState.collect { loginState ->
+            when (loginState) {
+                LoginState.SuccessLogin -> navController.navigate("login")
+                else -> {}
+            }
+        }
+    })
 }

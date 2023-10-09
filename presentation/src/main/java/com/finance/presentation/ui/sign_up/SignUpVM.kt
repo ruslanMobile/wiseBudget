@@ -2,6 +2,7 @@ package com.finance.presentation.ui.sign_up
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.finance.domain.repository.SignedState
 import com.finance.domain.usecase.EmailAuthUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -17,13 +18,11 @@ class SignUpVM @Inject constructor(
     private val emailAuthUseCase: EmailAuthUseCase
 ) : ViewModel() {
 
-    private val signUpState = MutableStateFlow(false)
+    private var signUpState = MutableStateFlow<SignedState>(SignedState.DefaultSignUp)
     val _signUpState = signUpState.asStateFlow()
-    fun signUpWithEmail(email: String, password: String) =
-        emailAuthUseCase.signUpWithEmail(email, password).stateIn(
-            scope = viewModelScope, // Use the appropriate coroutine scope
-            started = SharingStarted.WhileSubscribed(5000), // Set the desired sharing behavior
-            initialValue = false/* Provide an initial value or null if not needed */
-        )
-
+    fun signUpWithEmail(email: String, password: String) = viewModelScope.launch {
+        emailAuthUseCase.signUpWithEmail(email, password) {
+            signUpState.value = it
+        }
+    }
 }

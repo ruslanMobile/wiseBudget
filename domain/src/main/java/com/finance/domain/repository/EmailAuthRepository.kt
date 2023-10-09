@@ -1,8 +1,7 @@
 package com.finance.domain.repository
 
-import kotlinx.coroutines.flow.Flow
 
 interface EmailAuthRepository {
-
-    fun signUpWithEmail(email: String, password: String): Flow<Boolean>
+    suspend fun signUpWithEmail(email: String, password: String, func: (SignedState) -> Unit)
+    suspend fun loginWithEmail(email: String, password: String, func: (LoginState) -> Unit)
 }
