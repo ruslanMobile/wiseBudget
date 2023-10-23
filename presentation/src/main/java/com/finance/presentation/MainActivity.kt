@@ -11,6 +11,7 @@ import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
 import com.finance.presentation.ui.login.LoginScreen
 import com.finance.presentation.ui.login_or_signup.LogInOrSignUpScreen
+import com.finance.presentation.ui.main.MainScreen
 import com.finance.presentation.ui.sign_up.SignUpScreen
 import com.finance.presentation.ui.theme.WiseBudgetTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -23,23 +24,40 @@ class MainActivity : ComponentActivity() {
         setContent {
             WiseBudgetTheme {
                 val navController = rememberNavController()
+                val viewModel: MainActivityVM =
+                    hiltViewModel(viewModelStoreOwner = this@MainActivity)
 
-                NavHost(navController = navController, startDestination = "auth") {
+                NavHost(
+                    navController = navController,
+                    startDestination = if (viewModel.alreadyLoggedIn()) "mainLogic" else "auth"
+                ) {
                     navigation(route = "auth", startDestination = "loginOrSignup") {
                         composable("loginOrSignup") {
-                            LogInOrSignUpScreen(navController, hiltViewModel(viewModelStoreOwner = this@MainActivity))
+                            LogInOrSignUpScreen(
+                                navController,
+                                hiltViewModel(viewModelStoreOwner = this@MainActivity)
+                            )
                         }
                         composable("login") {
-                            LoginScreen(navController, hiltViewModel(viewModelStoreOwner = this@MainActivity))
+                            LoginScreen(
+                                navController,
+                                hiltViewModel(viewModelStoreOwner = this@MainActivity)
+                            )
                         }
                         composable("sign_up") {
-                            SignUpScreen(navController, hiltViewModel(viewModelStoreOwner = this@MainActivity))
+                            SignUpScreen(
+                                navController,
+                                hiltViewModel(viewModelStoreOwner = this@MainActivity)
+                            )
                         }
                     }
 
-                    navigation(route = "mainLogic", startDestination = "fer") {
-                        composable("fer") {
-                            LogInOrSignUpScreen(navController, hiltViewModel(viewModelStoreOwner = this@MainActivity))
+                    navigation(route = "mainLogic", startDestination = "main") {
+                        composable("main") {
+                            MainScreen(
+                                navController,
+                                hiltViewModel(viewModelStoreOwner = this@MainActivity)
+                            )
                         }
                     }
                 }

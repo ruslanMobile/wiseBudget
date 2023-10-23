@@ -188,7 +188,7 @@ fun LoginScreen(
     LaunchedEffect(key1 = true, block = {
         viewModel._loginUpState.collect { loginState ->
             when (loginState) {
-                LoginState.SuccessLogin -> navController.navigate("fer")
+                LoginState.SuccessLogin -> navController.navigate("main")
                 else -> {}
             }
         }

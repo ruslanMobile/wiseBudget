@@ -2,6 +2,7 @@ package com.finance.data.repository
 
 import com.finance.domain.repository.GoogleAuthRepository
 import com.finance.domain.repository.LoginState
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -21,4 +22,6 @@ class GoogleAuthRepositoryImpl @Inject constructor(
                 resFunc.invoke(LoginState.FailLogin(e.message))
             }
     }
+
+    override fun alreadyLoggedIn() = FirebaseAuth.getInstance().currentUser != null
 }

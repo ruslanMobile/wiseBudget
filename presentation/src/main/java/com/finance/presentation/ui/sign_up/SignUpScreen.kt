@@ -193,7 +193,7 @@ fun SignUpScreen(
         viewModel._signUpState.collect{ signUpState ->
             Log.e("MyLog","IT: $signUpState")
             when(signUpState){
-                SignedState.SuccessSignUp ->navController.navigate("fer")
+                SignedState.SuccessSignUp ->navController.navigate("main")
                 else -> {}
             }
         }

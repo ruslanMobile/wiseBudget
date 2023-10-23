@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.finance.domain.repository.GoogleAuthRepository
 import com.finance.domain.repository.LoginState
+import com.finance.domain.usecase.GoogleAuthUseCase
 import com.finance.presentation.R
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -18,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class LogInOrSignUpVM @Inject constructor(
     private val application: Application,
-    private val googleAuthRepository: GoogleAuthRepository
+    private val googleAuthUseCase: GoogleAuthUseCase
 ) : ViewModel() {
 
     private var loginUpState = MutableStateFlow<LoginState>(LoginState.DefaultLogin)
@@ -34,7 +35,7 @@ class LogInOrSignUpVM @Inject constructor(
     }
 
     fun authenticationWithGoogle(idToken: String?) = viewModelScope.launch{
-        googleAuthRepository.authenticationWithGoogle(idToken){
+        googleAuthUseCase.authenticationWithGoogle(idToken){
             loginUpState.value = it
         }
     }
