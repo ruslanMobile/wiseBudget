@@ -17,6 +17,8 @@
     <string name="btn_Sign_up">Sign up</string>
     <string name="btn_register">register</string>
     <string name="btn_Login">Login</string>
+    <string name="btn_expenses">Expenses</string>
+    <string name="btn_incomes">Incomes</string>
 
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>

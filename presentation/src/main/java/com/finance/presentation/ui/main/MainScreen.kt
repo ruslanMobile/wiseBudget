@@ -1,31 +1,64 @@
 package com.finance.presentation.ui.main
 
 import androidx.activity.compose.BackHandler
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BackdropScaffold
 import androidx.compose.material.BackdropValue
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.Text
 import androidx.compose.material.rememberBackdropScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.finance.presentation.MainActivity
-import kotlinx.coroutines.launch
+import com.finance.presentation.R
+import com.finance.presentation.ui.theme.GreenDark
+import com.finance.presentation.ui.theme.GreenDark2
+import com.finance.presentation.ui.theme.Silver
+import com.finance.presentation.utils.fontDimensionResource
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class,
+enum class MainScreenFrontPager {
+    EXPENSES, INCOMES
+}
+
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class,
     ExperimentalFoundationApi::class
 )
 @Composable
@@ -34,13 +67,15 @@ fun MainScreen(
     viewModel: MainVM = hiltViewModel()
 ) {
 
+    val expenses = viewModel.expenses.collectAsState()
+    //Log.e("MyLog","${expenses.value}")
 
 //    val suggestedDestinations by viewModel.suggestedDestinations.observeAsState()
 //
 //    val onPeopleChanged: (Int) -> Unit = { viewModel.updatePeople(it) }
-//    val craneScreenValues = CraneScreen.values()
-//    val pagerState =
-//        rememberPagerState(initialPage = CraneScreen.Fly.ordinal) { craneScreenValues.size }
+    val mainScreenValues = MainScreenFrontPager.values()
+    val pagerState =
+        rememberPagerState(initialPage = MainScreenFrontPager.EXPENSES.ordinal) { mainScreenValues.size }
     val context = LocalContext.current
     BackHandler(enabled = true) {
         finishAffinity(context as MainActivity)
@@ -50,8 +85,14 @@ fun MainScreen(
     BackdropScaffold(
         modifier = Modifier,
         scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed),
-        frontLayerShape = RoundedCornerShape(corner = CornerSize(20.dp)),
+        frontLayerShape = RoundedCornerShape(
+            topStart = dimensionResource(id = R.dimen.offset_20),
+            topEnd = dimensionResource(id = R.dimen.offset_20)
+        ),
         frontLayerScrimColor = Color.Unspecified,
+        frontLayerBackgroundColor = Silver,
+        backLayerBackgroundColor = GreenDark,
+        peekHeight = 300.dp,
         appBar = {
 
         },
@@ -59,7 +100,141 @@ fun MainScreen(
 
         },
         frontLayerContent = {
+            Surface(
+                modifier = Modifier
+                    .fillMaxSize(),
+                color = Color.Transparent
+            ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    Column(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
 
+                        Row(
+                            modifier = Modifier
+                                .padding(top = dimensionResource(id = R.dimen.offset_16))
+                                .fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceEvenly
+                        ) {
+                            Text(
+                                text = stringResource(id = R.string.btn_expenses),
+                                fontSize = fontDimensionResource(
+                                    id = R.dimen.text_20
+                                ),
+                                fontWeight = FontWeight(700)
+                            )
+                            Text(
+                                text = stringResource(id = R.string.btn_incomes),
+                                fontSize = fontDimensionResource(
+                                    id = R.dimen.text_20
+                                ),
+                                fontWeight = FontWeight(700)
+                            )
+                        }
+                        HorizontalPager(state = pagerState) { page ->
+                            when (mainScreenValues[page]) {
+                                MainScreenFrontPager.EXPENSES -> {
+                                    LazyColumn(
+                                        modifier = Modifier
+                                            .fillMaxSize()
+                                            .padding(
+                                                top = dimensionResource(
+                                                    id = R.dimen.offset_32
+                                                )
+                                            )
+                                    ) {
+                                        items(
+                                            items = expenses.value,
+                                            key = { it.name }) { category ->
+                                            val bottomBorder =
+                                                dimensionResource(id = R.dimen.offset_4).value
+                                            Row(
+                                                modifier = Modifier
+                                                    .fillMaxWidth()
+                                                    .height(dimensionResource(id = R.dimen.offset_62))
+                                                    .weight(5f)
+                                                    .padding(horizontal = dimensionResource(id = R.dimen.offset_26))
+                                                    .drawBehind {
+                                                        drawLine(
+                                                            color = GreenDark2,
+                                                            start = Offset(
+                                                                size.width / 5,
+                                                                size.height
+                                                            ),
+                                                            end = Offset(size.width, size.height),
+                                                            strokeWidth = bottomBorder,
+                                                            cap = StrokeCap.Round
+                                                        )
+                                                    }
+                                                    .clickable {
+                                                        viewModel.addExpenseToDb()
+                                                    },
+                                                horizontalArrangement = Arrangement.SpaceBetween,
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Row(
+                                                    horizontalArrangement = Arrangement.Start,
+                                                    modifier = Modifier.weight(1f)
+                                                ) {
+                                                    Icon(
+                                                        painter = painterResource(id = category.icon),
+                                                        contentDescription = "",
+                                                        tint = Color.Unspecified,
+                                                        modifier = Modifier
+                                                            .size(dimensionResource(id = R.dimen.offset_32))
+                                                    )
+                                                }
+                                                Text(
+                                                    text = category.name,
+                                                    modifier = Modifier.weight(2f),
+                                                    fontWeight = FontWeight(500),
+                                                    style = TextStyle(
+                                                        fontSize = fontDimensionResource(id = R.dimen.text_16),
+                                                        color = GreenDark,
+                                                        fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
+                                                        textAlign = TextAlign.Start
+                                                    ),
+                                                )
+
+                                                Column(
+                                                    modifier = Modifier.weight(2f),
+                                                    horizontalAlignment = Alignment.End,
+                                                    verticalArrangement = Arrangement.Center
+                                                ) {
+                                                    Text(
+                                                        text = "$2,800.00",
+                                                        style = TextStyle(
+                                                            fontSize = fontDimensionResource(id = R.dimen.text_16),
+                                                            color = GreenDark,
+                                                            fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
+                                                        )
+                                                    )
+                                                    Text(
+                                                        text = "15 transactions",
+                                                        style = TextStyle(
+                                                            fontSize = fontDimensionResource(id = R.dimen.text_12),
+                                                            color = GreenDark2,
+                                                            fontFamily = FontFamily(Font(resId = R.font.chakra_petch_medium)),
+                                                        )
+                                                    )
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+
+                                MainScreenFrontPager.INCOMES -> {
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
     )
 }

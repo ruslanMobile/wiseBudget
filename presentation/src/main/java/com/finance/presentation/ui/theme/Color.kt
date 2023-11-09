@@ -8,3 +8,5 @@ val Silver = Color(0xFFa3a599)
 val Yellow = Color(0xFFfbcd4b)
 
 val GreenDark2 = Color(0xFF4B4742)
+
+val TestHalfTransparent = Color(0x45B87F38)
