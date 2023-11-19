@@ -11,6 +11,13 @@
     <string name="label_dont_have_an_account">Don\'t have an account?</string>
     <string name="label_create_your_account">Create your account</string>
     <string name="label_already_have_an_account">Already have an account?</string>
+    <string name="label_add_expense">Add Expense</string>
+    <string name="label_expense_name">Expense Name</string>
+    <string name="label_amount">Amount</string>
+    <string name="label_category_dots">Category:</string>
+    <string name="label_date">Date</string>
+    <string name="label_selected_date">Selected: %s</string>
+    <string name="label_no_selection">no selection</string>
 
     <string name="btn_login">login</string>
     <string name="btn_sign_up">sign up</string>
@@ -19,6 +26,7 @@
     <string name="btn_Login">Login</string>
     <string name="btn_expenses">Expenses</string>
     <string name="btn_incomes">Incomes</string>
+    <string name="btn_done">Done</string>
 
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>

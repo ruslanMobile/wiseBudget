@@ -2,6 +2,7 @@ package com.finance.data.repository
 
 import android.util.Log
 import com.finance.domain.model.Expense
+import com.finance.domain.repository.ExpenseLogState
 import com.finance.domain.repository.ExpensesRepository
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
@@ -16,7 +17,7 @@ class ExpensesRepositoryImpl @Inject constructor(
 
 ) : ExpensesRepository {
 
-    override fun addExpenseToDb(model: Expense) = callbackFlow {
+    override fun addExpenseToDb(model: Expense, callback:(ExpenseLogState) -> Unit) {
         val db = Firebase.firestore
         Firebase.auth.uid?.let { uid ->
             db.collection(COLLECTION_USERS)
@@ -25,15 +26,13 @@ class ExpensesRepositoryImpl @Inject constructor(
                 .document()
                 .set(model)
                 .addOnSuccessListener {
-                    trySendBlocking(true)
+                    callback.invoke(ExpenseLogState.SuccessExpenseLogState)
                 }
                 .addOnFailureListener {
                     Log.e("MyLog", "ERROR: ${it.message}")
-                    trySendBlocking(false)
+                    callback.invoke(ExpenseLogState.FailureExpenseLogState(it.message))
                 }
         }
-
-        awaitClose { channel.close() }
     }
 
     companion object {

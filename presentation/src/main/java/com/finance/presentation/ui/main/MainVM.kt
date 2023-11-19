@@ -7,11 +7,10 @@ import com.finance.domain.model.Category
 import com.finance.domain.model.Expense
 import com.finance.domain.usecase.BudgetCategoryUseCase
 import com.finance.domain.usecase.ExpensesUseCase
+import com.finance.domain.repository.ExpenseLogState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,15 +23,20 @@ class MainVM @Inject constructor(
 
     val expenses = savedStateHandle.getStateFlow("expenses", listOf<Category>())
 
+    private var expenseLogState = MutableStateFlow<ExpenseLogState>(ExpenseLogState.InitExpenseLogState)
+    val _expenseLogState = expenseLogState.asStateFlow()
+
     init {
         getListOfExpensesCategory()
     }
 
-    fun getListOfExpensesCategory()= viewModelScope.launch{
+    fun getListOfExpensesCategory() = viewModelScope.launch {
         savedStateHandle["expenses"] = categoryUseCase.getListOfExpensesCategory()
     }
 
-    fun addExpenseToDb() {
-        expensesUseCase.addExpenseToDb(Expense("name","type", 463L)).onEach {  }.launchIn(viewModelScope)
+    fun addExpenseToDb(expense: Expense) {
+        expensesUseCase.addExpenseToDb(expense){ result ->
+            expenseLogState.value = result
+        }
     }
 }
