@@ -4,6 +4,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import kotlin.collections.sumOf
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -157,7 +158,7 @@ fun ExpensesIncomesScreen(
                                     verticalArrangement = Arrangement.Center
                                 ) {
                                     Text(
-                                        text = "$2,800.00",
+                                        text = "$${category.list?.sumOf { it.amount ?: 0 }}",
                                         style = TextStyle(
                                             fontSize = fontDimensionResource(id = R.dimen.text_16),
                                             color = GreenDark,
@@ -165,7 +166,7 @@ fun ExpensesIncomesScreen(
                                         )
                                     )
                                     Text(
-                                        text = "15 transactions",
+                                        text = (category.list?.size ?: 0).toString(),
                                         style = TextStyle(
                                             fontSize = fontDimensionResource(id = R.dimen.text_12),
                                             color = GreenDark2,

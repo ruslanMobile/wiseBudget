@@ -10,4 +10,6 @@ class ExpensesUseCase @Inject constructor(
 ) {
 
     fun addExpenseToDb(model: Expense, callback:(ExpenseLogState) -> Unit) = expensesRepository.addExpenseToDb(model, callback)
+
+    fun getAllExpensesFromDb(callback: (List<Expense>?) -> Unit) = expensesRepository.getAllExpensesFromDb(callback)
 }

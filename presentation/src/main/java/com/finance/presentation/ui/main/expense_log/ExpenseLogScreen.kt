@@ -106,7 +106,9 @@ fun ExpenseLogScreen(
                 ),
                 fontWeight = FontWeight(700)
             )
-            IconButton(onClick = { navController.navigate("expenses_incomes_list") }) {
+            IconButton(onClick = {
+                navController.popBackStack()
+            }) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_close),
                     contentDescription = "",
@@ -254,7 +256,7 @@ fun ExpenseLogScreen(
                 viewModel.addExpenseToDb(
                     Expense(
                         expenseName = expenseName.value,
-                        category = category?.lowercase() ?: "",
+                        category = category ?: "",
                         amount = expenseAmount.value.toInt(),
                         dateLong = datePickerState.selectedDateMillis ?: 0L
                     )
@@ -297,11 +299,14 @@ fun ExpenseLogScreen(
         }
     }
 
-    LaunchedEffect(key1 = true, block = {
+    LaunchedEffect(key1 = Unit, block = {
         viewModel._expenseLogState.collect{ state ->
             Log.e("MyLog","IT: $state")
             when(state){
-                ExpenseLogState.SuccessExpenseLogState -> navController.popBackStack()
+                ExpenseLogState.SuccessExpenseLogState -> {
+                    Log.e("MyLog","SuccessExpenseLogState")
+                    navController.popBackStack()
+                }
                 else -> {}
             }
         }
