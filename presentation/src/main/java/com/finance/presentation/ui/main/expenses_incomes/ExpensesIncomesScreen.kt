@@ -21,6 +21,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -42,6 +43,7 @@ import com.finance.presentation.ui.main.MainVM
 import com.finance.presentation.ui.theme.GreenDark
 import com.finance.presentation.ui.theme.GreenDark2
 import com.finance.presentation.utils.fontDimensionResource
+import kotlinx.coroutines.launch
 
 enum class MainScreenFrontPager {
     EXPENSES, INCOMES
@@ -56,7 +58,9 @@ fun ExpensesIncomesScreen(
     navController: NavHostController,
     viewModel: MainVM = hiltViewModel()
 ) {
+    val coroutineScope = rememberCoroutineScope()
     val expenses = viewModel.expenses.collectAsState()
+    val incomes = viewModel.incomes.collectAsState()
     val mainScreenValues = MainScreenFrontPager.values()
     val pagerState =
         rememberPagerState(initialPage = MainScreenFrontPager.EXPENSES.ordinal) { mainScreenValues.size }
@@ -77,14 +81,24 @@ fun ExpensesIncomesScreen(
                 fontSize = fontDimensionResource(
                     id = R.dimen.text_20
                 ),
-                fontWeight = FontWeight(700)
+                fontWeight = FontWeight(700),
+                modifier = Modifier.clickable {
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(MainScreenFrontPager.EXPENSES.ordinal)
+                    }
+                }
             )
             Text(
                 text = stringResource(id = R.string.btn_incomes),
                 fontSize = fontDimensionResource(
                     id = R.dimen.text_20
                 ),
-                fontWeight = FontWeight(700)
+                fontWeight = FontWeight(700),
+                modifier = Modifier.clickable {
+                    coroutineScope.launch {
+                        pagerState.animateScrollToPage(MainScreenFrontPager.INCOMES.ordinal)
+                    }
+                }
             )
         }
         HorizontalPager(state = pagerState) { page ->
@@ -180,7 +194,93 @@ fun ExpensesIncomesScreen(
                 }
 
                 MainScreenFrontPager.INCOMES -> {
+                    LazyColumn(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(
+                                top = dimensionResource(
+                                    id = R.dimen.offset_32
+                                )
+                            )
+                    ) {
+                        items(
+                            items = incomes.value,
+                            key = { it.name }) { category ->
+                            val bottomBorder =
+                                dimensionResource(id = R.dimen.offset_4).value
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(dimensionResource(id = R.dimen.offset_62))
+                                    .weight(5f)
+                                    .padding(horizontal = dimensionResource(id = R.dimen.offset_26))
+                                    .drawBehind {
+                                        drawLine(
+                                            color = GreenDark2,
+                                            start = Offset(
+                                                size.width / 5,
+                                                size.height
+                                            ),
+                                            end = Offset(size.width, size.height),
+                                            strokeWidth = bottomBorder,
+                                            cap = StrokeCap.Round
+                                        )
+                                    }
+                                    .clickable {
+                                        navController.navigate("income_log/${category.name}")
+                                    },
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Row(
+                                    horizontalArrangement = Arrangement.Start,
+                                    modifier = Modifier.weight(1f)
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = category.icon),
+                                        contentDescription = "",
+                                        tint = Color.Unspecified,
+                                        modifier = Modifier
+                                            .size(dimensionResource(id = R.dimen.offset_32))
+                                    )
+                                }
+                                Text(
+                                    text = category.name,
+                                    modifier = Modifier.weight(2f),
+                                    fontWeight = FontWeight(500),
+                                    style = TextStyle(
+                                        fontSize = fontDimensionResource(id = R.dimen.text_16),
+                                        color = GreenDark,
+                                        fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
+                                        textAlign = TextAlign.Start
+                                    ),
+                                )
 
+                                Column(
+                                    modifier = Modifier.weight(2f),
+                                    horizontalAlignment = Alignment.End,
+                                    verticalArrangement = Arrangement.Center
+                                ) {
+                                    Text(
+                                        text = "$${category.list?.sumOf { it.amount ?: 0 } ?: 0}",
+                                        style = TextStyle(
+                                            fontSize = fontDimensionResource(id = R.dimen.text_16),
+                                            color = GreenDark,
+                                            fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
+                                        )
+                                    )
+                                    Text(
+                                        text = (category.list?.size ?: 0).toString(),
+                                        style = TextStyle(
+                                            fontSize = fontDimensionResource(id = R.dimen.text_12),
+                                            color = GreenDark2,
+                                            fontFamily = FontFamily(Font(resId = R.font.chakra_petch_medium)),
+                                        )
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }

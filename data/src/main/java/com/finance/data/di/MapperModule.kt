@@ -1,6 +1,7 @@
 package com.finance.data.di
 
 import com.finance.data.mapper.ExpenseDocumentSnapshotMapper
+import com.finance.data.mapper.IncomeDocumentSnapshotMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -14,4 +15,9 @@ class MapperModule {
     @Singleton
     @Provides
     fun getExpenseMapper() = ExpenseDocumentSnapshotMapper()
+
+    @Singleton
+    @Provides
+    fun getIncomeMapper() = IncomeDocumentSnapshotMapper()
+
 }

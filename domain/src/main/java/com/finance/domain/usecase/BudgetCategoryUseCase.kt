@@ -8,4 +8,6 @@ class BudgetCategoryUseCase  @Inject constructor(
 ) {
 
     fun getListOfExpensesCategory() = categoryRepository.getListOfExpensesCategory()
+
+    fun getListOfIncomesCategory() = categoryRepository.getListOfIncomesCategory()
 }

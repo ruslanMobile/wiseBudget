@@ -61,6 +61,7 @@ import com.finance.presentation.ui.login.LoginScreen
 import com.finance.presentation.ui.login_or_signup.LogInOrSignUpScreen
 import com.finance.presentation.ui.main.expense_log.ExpenseLogScreen
 import com.finance.presentation.ui.main.expenses_incomes.ExpensesIncomesScreen
+import com.finance.presentation.ui.main.income_log.IncomeLogScreen
 import com.finance.presentation.ui.sign_up.SignUpScreen
 import com.finance.presentation.ui.theme.GreenDark
 import com.finance.presentation.ui.theme.GreenDark2
@@ -150,6 +151,16 @@ fun MainScreen(
                             arguments = listOf(navArgument("category") { type = NavType.StringType })
                         ) { backStackEntry ->
                             ExpenseLogScreen(
+                                navController,
+                                viewModel,
+                                backStackEntry.arguments?.getString("category")
+                            )
+                        }
+                        composable(
+                            "income_log/{category}",
+                            arguments = listOf(navArgument("category") { type = NavType.StringType })
+                        ) { backStackEntry ->
+                            IncomeLogScreen(
                                 navController,
                                 viewModel,
                                 backStackEntry.arguments?.getString("category")
