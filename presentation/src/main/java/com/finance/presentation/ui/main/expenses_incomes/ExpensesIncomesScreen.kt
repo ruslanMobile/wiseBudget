@@ -1,5 +1,7 @@
 package com.finance.presentation.ui.main.expenses_incomes
 
+import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,7 +22,9 @@ import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -39,6 +43,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.finance.presentation.R
+import com.finance.presentation.ui.custom_ui.PagerLabel
 import com.finance.presentation.ui.main.MainVM
 import com.finance.presentation.ui.theme.GreenDark
 import com.finance.presentation.ui.theme.GreenDark2
@@ -64,6 +69,15 @@ fun ExpensesIncomesScreen(
     val mainScreenValues = MainScreenFrontPager.values()
     val pagerState =
         rememberPagerState(initialPage = MainScreenFrontPager.EXPENSES.ordinal) { mainScreenValues.size }
+    val animVal = remember { Animatable(0f) }
+
+    LaunchedEffect(key1 = pagerState.currentPage) {
+        animVal.snapTo(0f)
+        animVal.animateTo(
+            targetValue = 1f,
+            animationSpec = tween(durationMillis = 400)
+        )
+    }
 
     Column(
         modifier = Modifier.fillMaxWidth(),
@@ -76,30 +90,28 @@ fun ExpensesIncomesScreen(
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            Text(
+
+            PagerLabel(
                 text = stringResource(id = R.string.btn_expenses),
-                fontSize = fontDimensionResource(
-                    id = R.dimen.text_20
-                ),
-                fontWeight = FontWeight(700),
-                modifier = Modifier.clickable {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(MainScreenFrontPager.EXPENSES.ordinal)
-                    }
+                isSelected = pagerState.currentPage == MainScreenFrontPager.EXPENSES.ordinal,
+                animVal = animVal.value,
+            ) {
+                coroutineScope.launch {
+                    animVal.snapTo(0f)
+                    pagerState.animateScrollToPage(MainScreenFrontPager.EXPENSES.ordinal)
                 }
-            )
-            Text(
+            }
+
+            PagerLabel(
                 text = stringResource(id = R.string.btn_incomes),
-                fontSize = fontDimensionResource(
-                    id = R.dimen.text_20
-                ),
-                fontWeight = FontWeight(700),
-                modifier = Modifier.clickable {
-                    coroutineScope.launch {
-                        pagerState.animateScrollToPage(MainScreenFrontPager.INCOMES.ordinal)
-                    }
+                isSelected = pagerState.currentPage == MainScreenFrontPager.INCOMES.ordinal,
+                animVal = animVal.value
+            ) {
+                coroutineScope.launch {
+                    animVal.snapTo(0f)
+                    pagerState.animateScrollToPage(MainScreenFrontPager.INCOMES.ordinal)
                 }
-            )
+            }
         }
         HorizontalPager(state = pagerState) { page ->
             when (mainScreenValues[page]) {
