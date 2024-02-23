@@ -8,6 +8,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BackdropScaffold
 import androidx.compose.material.BackdropValue
 import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.material.IconButton
 import androidx.compose.material.Text
 import androidx.compose.material.rememberBackdropScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -32,9 +35,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
@@ -94,7 +99,7 @@ fun MainScreen(
     val coroutineScope = rememberCoroutineScope()
     BackdropScaffold(
         modifier = Modifier,
-        scaffoldState = rememberBackdropScaffoldState(BackdropValue.Revealed),
+        scaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed),
         frontLayerShape = RoundedCornerShape(
             topStart = dimensionResource(id = R.dimen.offset_20),
             topEnd = dimensionResource(id = R.dimen.offset_20)
@@ -102,12 +107,76 @@ fun MainScreen(
         frontLayerScrimColor = Color.Unspecified,
         frontLayerBackgroundColor = Silver,
         backLayerBackgroundColor = GreenDark,
-        peekHeight = 300.dp,
+        peekHeight = 20.dp,
+        headerHeight = dimensionResource(id = R.dimen.offset_120),
+        stickyFrontLayer = true,
         appBar = {
 
         },
         backLayerContent = {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.45f),
+                color = Color.Transparent
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Spacer(modifier = Modifier.weight(1f))
+                    IconButton(onClick = {}) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_round_arrow_left),
+                            tint = Silver,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(dimensionResource(id = R.dimen.offset_40))
+                                .weight(1f)
+                        )
+                    }
 
+                    Column(
+                        modifier = Modifier.weight(12f),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "October",
+                            style = TextStyle(
+                                fontSize = fontDimensionResource(id = R.dimen.text_26),
+                                color = Color.White,
+                                fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
+                                textAlign = TextAlign.Center
+                            )
+                        )
+
+                        Text(
+                            text = "$43,550",
+                            style = TextStyle(
+                                fontSize = fontDimensionResource(id = R.dimen.text_48),
+                                color = Color.White,
+                                fontFamily = FontFamily(Font(resId = R.font.chakra_petch_bold)),
+                                textAlign = TextAlign.Center
+                            )
+                        )
+                    }
+
+                    IconButton(onClick = {}) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_round_arrow_left),
+                            tint = Silver,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(dimensionResource(id = R.dimen.offset_40))
+                                .rotate(180f)
+                                .weight(1f)
+                        )
+                    }
+                    Spacer(modifier = Modifier.weight(1f))
+                }
+            }
         },
         frontLayerContent = {
 
@@ -148,7 +217,9 @@ fun MainScreen(
                         }
                         composable(
                             "expense_log/{category}",
-                            arguments = listOf(navArgument("category") { type = NavType.StringType })
+                            arguments = listOf(navArgument("category") {
+                                type = NavType.StringType
+                            })
                         ) { backStackEntry ->
                             ExpenseLogScreen(
                                 navController,
@@ -158,7 +229,9 @@ fun MainScreen(
                         }
                         composable(
                             "income_log/{category}",
-                            arguments = listOf(navArgument("category") { type = NavType.StringType })
+                            arguments = listOf(navArgument("category") {
+                                type = NavType.StringType
+                            })
                         ) { backStackEntry ->
                             IncomeLogScreen(
                                 navController,
