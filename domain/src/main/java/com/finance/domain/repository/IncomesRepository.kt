@@ -5,5 +5,5 @@ import com.finance.domain.model.Income
 interface IncomesRepository {
     fun addIncomeToDb(model: Income, callback: (IncomeLogState) -> Unit)
 
-    fun getAllIncomesFromDb(callback: (List<Income>?) -> Unit)
+    fun getAllIncomesFromDb(startDate: Long, endDate: Long, callback: (TransactionReceiveState) -> Unit)
 }

@@ -6,3 +6,5 @@ const val DEFAULT_EXPENSES_CATEGORY_TRANSPORT = "Transport"
 
 const val DEFAULT_INCOMES_CATEGORY_SALARY = "Salary"
 const val DEFAULT_INCOMES_CATEGORY_CRYPTO = "Crypto"
+
+const val FIELD_DATE_LONG = "dateLong"
