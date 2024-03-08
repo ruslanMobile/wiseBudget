@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "315705039594",
+    "project_id": "wise-budget-prod",
+    "storage_bucket": "wise-budget-prod.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:315705039594:android:ddfe361806ade7d1ee5593",
+        "android_client_info": {
+          "package_name": "com.finance.budgeting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "315705039594-femfn8o2t3l0djnvp43sp5v14picgm34.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.finance.budgeting",
+            "certificate_hash": "65d1a03f32e6d1c8a54ae0e86dce7a19e85060af"
+          }
+        },
+        {
+          "client_id": "315705039594-o0e6m36vh5mu1gdvi0rhe211s5ehbae2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpuTz36239Yjcp22Vf9E7sVmeXQK3a8Kc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "315705039594-o0e6m36vh5mu1gdvi0rhe211s5ehbae2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

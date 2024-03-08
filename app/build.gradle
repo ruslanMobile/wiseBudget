@@ -7,6 +7,16 @@ plugins {
 }
 
 android {
+
+    signingConfigs {
+        release {
+            storeFile file('/Users/ruslan/programmingNew/Android/Wise budget files/private data/budgetapp-key.jks')
+            storePassword 'wisebudgeting2024dev'
+            keyAlias 'key0'
+            keyPassword 'wisebudgeting2024dev'
+        }
+    }
+
     namespace 'com.finance.wisebudget'
     compileSdk 34
 
@@ -24,11 +34,46 @@ android {
     }
 
     buildTypes {
+        debug{
+            buildConfigField("String", "APP_NAME", APPLICATION_NAME_DEV)
+            manifestPlaceholders = [crashlyticsCollectionEnabled: "true",  appName: "Dev_Wise_budget"]
+        }
+
         release {
+            buildConfigField("String", "APP_NAME", APPLICATION_NAME_DEV)
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            manifestPlaceholders = [crashlyticsCollectionEnabled: "true",  appName: "Wise budget"]
+        }
+
+        applicationVariants.all { variant ->
+            variant.outputs.all {
+                project.ext {
+                    if (outputFileName.contains("release")) appName = 'wisebudget-release'
+                    else appName = 'wisebudget'
+                }
+                def formattedDate = new Date().format('yyyy-MM-dd-hh')
+                def newName = outputFileName
+                newName = newName.replace("app-", "wisebudget_")
+                newName = newName.replace("debug", formattedDate + "versionName_" + versionName)
+                newName = newName.replace("release", formattedDate + "versionName_" + versionName)
+                outputFileName = newName
+            }
         }
     }
+
+    flavorDimensions "version"
+    productFlavors {
+        dev {
+            signingConfig android.signingConfigs.release
+            applicationId "com.finance.wisebudget"
+        }
+        prod {
+            signingConfig android.signingConfigs.release
+            applicationId "com.finance.budgeting"
+        }
+    }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
