@@ -20,6 +20,11 @@
     <string name="label_no_selection">no selection</string>
     <string name="label_add_income">Add Income</string>
     <string name="label_income_name">Income Name</string>
+    <string name="label_password_is_short">Password is too short</string>
+    <string name="label_passwords_did_not_match">Passwords did not match</string>
+    <string name="label_email_is_incorrect">Email is incorrect</string>
+    <string name="label_invalid_email_or_password_login_error">Log in failed: Invalid email or password</string>
+    <string name="label_invalid_email_or_password_sign_up_error">Sign up failed: Invalid email or password</string>
 
     <string name="btn_login">login</string>
     <string name="btn_sign_up">sign up</string>
@@ -33,6 +38,7 @@
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
     <string name="hint_repeat_password">Repeat password</string>
+    <string name="hint_email">Email</string>
 
     <string name="default_web_client_id">492742405410-nrg7q0gd55gm02r43o1pe6vpip2e4rli.apps.googleusercontent.com</string>
 <!--    315705039594-o0e6m36vh5mu1gdvi0rhe211s5ehbae2.apps.googleusercontent.com-->

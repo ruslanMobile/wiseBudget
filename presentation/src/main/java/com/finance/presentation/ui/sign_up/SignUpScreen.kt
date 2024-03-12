@@ -1,28 +1,31 @@
 package com.finance.presentation.ui.sign_up
 
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.ClickableText
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
@@ -34,23 +37,35 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.finance.domain.repository.SignedState
 import com.finance.presentation.R
 import com.finance.presentation.ui.custom_ui.BasicAuthTextField
-import com.finance.presentation.ui.login.LoginVM
 import com.finance.presentation.ui.theme.GreenDark
 import com.finance.presentation.ui.theme.GreenDark2
 import com.finance.presentation.ui.theme.Silver
 import com.finance.presentation.utils.fontDimensionResource
-import com.finance.presentation.utils.requestNotCheckError
-import kotlinx.coroutines.flow.collect
 
 @Composable
 fun SignUpScreen(
     navController: NavHostController,
     viewModel: SignUpVM = hiltViewModel()
 ) {
+
+    val signUpState = viewModel._signUpState.collectAsStateWithLifecycle()
+    when (signUpState.value) {
+        is SignedState.SuccessSignUp -> {
+            navController.navigate("main")
+        }
+        is SignedState.FailSignUp -> {
+            Toast.makeText(
+                LocalContext.current, stringResource(id = R.string.label_invalid_email_or_password_sign_up_error),
+                Toast.LENGTH_SHORT
+            ).show()
+        }
+        else -> {}
+    }
 
     val usernameState = remember {
         mutableStateOf("")
@@ -110,8 +125,10 @@ fun SignUpScreen(
                     state = usernameState,
                     startIcon = R.drawable.ic_user,
                     modifier = Modifier.padding(top = dimensionResource(id = R.dimen.offset_56)),
-                    hintText = R.string.hint_username,
-                    borderBrush = Brush.horizontalGradient(listOf(GreenDark2, Silver))
+                    hintText = R.string.hint_email,
+                    borderBrush = Brush.horizontalGradient(listOf(GreenDark2, Silver)),
+                    isError = signUpState.value is SignedState.EmailIncorrect,
+                    errorMessage = stringResource(id = R.string.label_email_is_incorrect)
                 )
 
                 BasicAuthTextField(
@@ -120,7 +137,9 @@ fun SignUpScreen(
                     modifier = Modifier.padding(top = dimensionResource(id = R.dimen.offset_26)),
                     hintText = R.string.hint_password,
                     borderBrush = Brush.horizontalGradient(listOf(Silver, GreenDark2)),
-                    visualTransformation = PasswordVisualTransformation()
+                    visualTransformation = PasswordVisualTransformation(),
+                    isError = signUpState.value is SignedState.PasswordIncorrect,
+                    errorMessage = stringResource(id = R.string.label_password_is_short)
                 )
 
                 BasicAuthTextField(
@@ -129,7 +148,9 @@ fun SignUpScreen(
                     modifier = Modifier.padding(top = dimensionResource(id = R.dimen.offset_26)),
                     hintText = R.string.hint_repeat_password,
                     borderBrush = Brush.horizontalGradient(listOf(GreenDark2, Silver)),
-                    visualTransformation = PasswordVisualTransformation()
+                    visualTransformation = PasswordVisualTransformation(),
+                    isError = signUpState.value is SignedState.RepeatPasswordIncorrect,
+                    errorMessage = stringResource(id = R.string.label_passwords_did_not_match)
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
@@ -141,7 +162,7 @@ fun SignUpScreen(
             ) {
                 Button(
                     onClick = {
-                        viewModel.signUpWithEmail(usernameState.value, passwordState.value)
+                        viewModel.signUpWithEmail(usernameState.value, passwordState.value, repeatPasswordState.value)
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Silver,
@@ -186,16 +207,17 @@ fun SignUpScreen(
                 }
             }
         }
-    }
-
-
-    LaunchedEffect(key1 = true, block = {
-        viewModel._signUpState.collect{ signUpState ->
-            Log.e("MyLog","IT: $signUpState")
-            when(signUpState){
-                SignedState.SuccessSignUp ->navController.navigate("main")
-                else -> {}
+        if(signUpState.value is SignedState.LoadingSignUp) {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(dimensionResource(id = R.dimen.offset_56))
+                        .align(Alignment.Center),
+                    color = GreenDark
+                )
             }
         }
-    })
+    }
 }

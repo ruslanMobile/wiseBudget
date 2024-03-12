@@ -25,3 +25,8 @@ fun <T> Flow<T>.requestNotCheckError(lifecycle:Lifecycle, lifecycleScope: Lifecy
     flowWithLifecycle(lifecycle, Lifecycle.State.STARTED)
         .onEach { event?.invoke(it) }.launchIn(lifecycleScope)
 }
+
+fun isEmailValid(email: String): Boolean {
+    val emailRegex = Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")
+    return emailRegex.matches(email)
+}

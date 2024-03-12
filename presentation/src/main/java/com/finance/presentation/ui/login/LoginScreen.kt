@@ -1,8 +1,11 @@
 package com.finance.presentation.ui.login
 
+import android.widget.Toast
+import android.widget.Toast.LENGTH_SHORT
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -10,29 +13,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.ClickableText
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -41,11 +37,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.finance.domain.repository.LoginState
 import com.finance.presentation.R
@@ -61,6 +57,17 @@ fun LoginScreen(
     navController: NavHostController,
     viewModel: LoginVM = hiltViewModel()
 ) {
+
+    val loginState = viewModel._loginUpState.collectAsStateWithLifecycle(initialValue = LoginState.DefaultLogin)
+    when (loginState.value) {
+        is LoginState.SuccessLogin -> {
+            navController.navigate("main")
+        }
+        is LoginState.FailLogin -> {
+            Toast.makeText(LocalContext.current, stringResource(id = R.string.label_invalid_email_or_password_login_error), LENGTH_SHORT).show()
+        }
+        else -> {}
+    }
 
     val usernameState = remember {
         mutableStateOf("")
@@ -116,8 +123,10 @@ fun LoginScreen(
                     state = usernameState,
                     startIcon = R.drawable.ic_user,
                     modifier = Modifier.padding(top = dimensionResource(id = R.dimen.offset_56)),
-                    hintText = R.string.hint_username,
-                    borderBrush = Brush.horizontalGradient(listOf(GreenDark2, Silver))
+                    hintText = R.string.hint_email,
+                    borderBrush = Brush.horizontalGradient(listOf(GreenDark2, Silver)),
+                    isError = loginState.value is LoginState.EmailIncorrect,
+                    errorMessage = stringResource(id = R.string.label_email_is_incorrect)
                 )
 
                 BasicAuthTextField(
@@ -126,7 +135,9 @@ fun LoginScreen(
                     modifier = Modifier.padding(0.dp, dimensionResource(id = R.dimen.offset_26)),
                     hintText = R.string.hint_password,
                     borderBrush = Brush.horizontalGradient(listOf(Silver, GreenDark2)),
-                    visualTransformation = PasswordVisualTransformation()
+                    visualTransformation = PasswordVisualTransformation(),
+                    isError = loginState.value is LoginState.PasswordIncorrect,
+                    errorMessage = stringResource(id = R.string.label_password_is_short)
                 )
             }
             Spacer(modifier = Modifier.weight(1f))
@@ -183,14 +194,17 @@ fun LoginScreen(
                 }
             }
         }
-    }
-
-    LaunchedEffect(key1 = true, block = {
-        viewModel._loginUpState.collect { loginState ->
-            when (loginState) {
-                LoginState.SuccessLogin -> navController.navigate("main")
-                else -> {}
+        if(loginState.value is LoginState.LoadingLogin) {
+            Box(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                CircularProgressIndicator(
+                    modifier = Modifier
+                        .size(dimensionResource(id = R.dimen.offset_56))
+                        .align(Alignment.Center),
+                    color = GreenDark
+                )
             }
         }
-    })
+    }
 }
