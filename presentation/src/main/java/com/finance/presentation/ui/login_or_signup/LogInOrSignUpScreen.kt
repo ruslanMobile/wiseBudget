@@ -1,6 +1,7 @@
 package com.finance.presentation.ui.login_or_signup
 
 import android.app.Activity
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
@@ -34,6 +35,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -59,6 +61,7 @@ fun LogInOrSignUpScreen(
     viewModel: LogInOrSignUpVM = hiltViewModel()
 ) {
 
+    val context = LocalContext.current
     val authResultLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -70,6 +73,12 @@ fun LogInOrSignUpScreen(
                         viewModel.authenticationWithGoogle(task.idToken)
                     }
                 }
+            } else {
+                Toast.makeText(
+                    context,
+                    context.resources.getString(R.string.label_google_auth_failed),
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
 
