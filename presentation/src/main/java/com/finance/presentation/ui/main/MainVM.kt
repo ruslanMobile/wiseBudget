@@ -16,6 +16,7 @@ import com.finance.domain.usecase.IncomesUseCase
 import com.finance.presentation.utils.getEndTimeFromParticularMonth
 import com.finance.presentation.utils.getStartTimeFromParticularMonth
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.channels.BufferOverflow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asSharedFlow
@@ -38,11 +39,19 @@ class MainVM @Inject constructor(
     val expensesOrIncomesSelected = savedStateHandle.getStateFlow("expensesOrIncomesSelected", 0)
 
     private var expenseLogState =
-        MutableSharedFlow<ExpenseLogState>(replay = 1)
+        MutableSharedFlow<ExpenseLogState>(
+            replay = 0,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST,
+            extraBufferCapacity = 1
+        )
     val _expenseLogState = expenseLogState.asSharedFlow()
 
     private var incomeLogState =
-        MutableSharedFlow<IncomeLogState>(replay = 1)
+        MutableSharedFlow<IncomeLogState>(
+            replay = 0,
+            onBufferOverflow = BufferOverflow.DROP_OLDEST,
+            extraBufferCapacity = 1
+        )
     val _incomeLogState = incomeLogState.asSharedFlow()
 
     private var incomesReceiveState =
@@ -144,7 +153,7 @@ class MainVM @Inject constructor(
         if (transaction.isNullOrBlankName()) {
             expenseLogState.tryEmit(ExpenseLogState.NameErrorExpenseLogState())
             return false
-        } else if (transaction.amount == null ) {
+        } else if (transaction.amount == null) {
             expenseLogState.tryEmit(ExpenseLogState.AmountErrorExpenseLogState())
             return false
         }

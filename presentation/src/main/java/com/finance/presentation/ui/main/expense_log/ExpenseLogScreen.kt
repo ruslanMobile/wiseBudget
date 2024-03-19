@@ -76,12 +76,6 @@ fun ExpenseLogScreen(
 ) {
 
     val expenseLogState = viewModel._expenseLogState.collectAsStateWithLifecycle(initialValue = ExpenseLogState.InitExpenseLogState)
-    when (expenseLogState.value) {
-        ExpenseLogState.SuccessExpenseLogState -> {
-            navController.popBackStack()
-        }
-        else -> {}
-    }
 
     val expenseName = remember {
         mutableStateOf("")
@@ -312,4 +306,17 @@ fun ExpenseLogScreen(
             }
         }
     }
+
+    LaunchedEffect(key1 = Unit, block = {
+        viewModel._expenseLogState.collect{ state ->
+            Log.e("MyLog","IT: $state")
+            when(state){
+                ExpenseLogState.SuccessExpenseLogState -> {
+                    Log.e("MyLog","SuccessExpenseLogState")
+                    navController.popBackStack()
+                }
+                else -> {}
+            }
+        }
+    })
 }

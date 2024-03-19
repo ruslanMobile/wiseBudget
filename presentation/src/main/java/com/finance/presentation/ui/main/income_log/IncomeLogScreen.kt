@@ -75,12 +75,6 @@ fun IncomeLogScreen(
 ) {
 
     val incomeLogState = viewModel._incomeLogState.collectAsStateWithLifecycle(initialValue = IncomeLogState.InitIncomeLogState)
-    when (incomeLogState.value) {
-        IncomeLogState.SuccessIncomeLogState -> {
-            navController.popBackStack()
-        }
-        else -> {}
-    }
 
 
     val incomeName = remember {
@@ -161,7 +155,7 @@ fun IncomeLogScreen(
 
         BasicLowOutlineTextField(
             expenseNameState = incomeAmount,
-            isError = incomeLogState.value is IncomeLogState.NameErrorIncomeLogState,
+            isError = incomeLogState.value is IncomeLogState.AmountErrorIncomeLogState,
             errorMessage = stringResource(id = R.string.label_field_is_empty),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
@@ -271,7 +265,7 @@ fun IncomeLogScreen(
                     Income(
                         incomeName = incomeName.value,
                         category = category ?: "",
-                        amount = incomeAmount.value.toInt(),
+                        amount = incomeAmount.value.toIntOrNull(),
                         dateLong = datePickerState.selectedDateMillis ?: 0L
                     )
                 )
@@ -312,4 +306,17 @@ fun IncomeLogScreen(
             }
         }
     }
+
+    LaunchedEffect(key1 = Unit, block = {
+        viewModel._incomeLogState.collect{ state ->
+            Log.e("MyLog","IT: $state")
+            when(state){
+                IncomeLogState.SuccessIncomeLogState -> {
+                    Log.e("MyLog","SuccessIncomeLogState")
+                    navController.popBackStack()
+                }
+                else -> {}
+            }
+        }
+    })
 }
