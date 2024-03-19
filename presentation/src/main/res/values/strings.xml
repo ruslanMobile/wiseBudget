@@ -26,6 +26,7 @@
     <string name="label_invalid_email_or_password_login_error">Log in failed: Invalid email or password</string>
     <string name="label_invalid_email_or_password_sign_up_error">Sign up failed: Invalid email or password</string>
     <string name="label_google_auth_failed">Google authentication failed</string>
+    <string name="label_field_is_empty">Field is empty</string>
 
     <string name="btn_login">login</string>
     <string name="btn_sign_up">sign up</string>

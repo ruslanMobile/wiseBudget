@@ -5,4 +5,9 @@ data class Income(
     override val category: String?,
     override val amount: Int?,
     override val dateLong: Long?,
-): TransactionBase()
+): TransactionBase(){
+
+    override fun isNullOrBlankName(): Boolean {
+        return incomeName.isNullOrBlank()
+    }
+}

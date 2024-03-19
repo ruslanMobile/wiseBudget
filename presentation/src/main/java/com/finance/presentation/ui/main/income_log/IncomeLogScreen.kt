@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.finance.domain.model.Income
 import com.finance.domain.repository.IncomeLogState
@@ -72,6 +73,16 @@ fun IncomeLogScreen(
     viewModel: MainVM = hiltViewModel(),
     category: String?
 ) {
+
+    val incomeLogState = viewModel._incomeLogState.collectAsStateWithLifecycle(initialValue = IncomeLogState.InitIncomeLogState)
+    when (incomeLogState.value) {
+        IncomeLogState.SuccessIncomeLogState -> {
+            navController.popBackStack()
+        }
+        else -> {}
+    }
+
+
     val incomeName = remember {
         mutableStateOf("")
     }
@@ -130,7 +141,9 @@ fun IncomeLogScreen(
         )
 
         BasicLowOutlineTextField(
-            incomeName
+            expenseNameState = incomeName,
+            isError = incomeLogState.value is IncomeLogState.NameErrorIncomeLogState,
+            errorMessage = stringResource(id = R.string.label_field_is_empty)
         )
 
         Text(
@@ -147,8 +160,10 @@ fun IncomeLogScreen(
         )
 
         BasicLowOutlineTextField(
-            incomeAmount,
-            KeyboardOptions(keyboardType = KeyboardType.Number)
+            expenseNameState = incomeAmount,
+            isError = incomeLogState.value is IncomeLogState.NameErrorIncomeLogState,
+            errorMessage = stringResource(id = R.string.label_field_is_empty),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
         Row(
@@ -297,17 +312,4 @@ fun IncomeLogScreen(
             }
         }
     }
-
-    LaunchedEffect(key1 = Unit, block = {
-        viewModel._incomeLogState.collect{ state ->
-            Log.e("MyLog","IT: $state")
-            when(state){
-                IncomeLogState.SuccessIncomeLogState -> {
-                    Log.e("MyLog","SuccessIncomeLogState")
-                    navController.popBackStack()
-                }
-                else -> {}
-            }
-        }
-    })
 }

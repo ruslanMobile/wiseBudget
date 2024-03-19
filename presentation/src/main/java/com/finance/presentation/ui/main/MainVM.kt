@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.finance.domain.model.Category
 import com.finance.domain.model.Expense
 import com.finance.domain.model.Income
+import com.finance.domain.model.TransactionBase
 import com.finance.domain.repository.ExpenseLogState
 import com.finance.domain.repository.IncomeLogState
 import com.finance.domain.repository.TransactionReceiveState
@@ -37,11 +38,11 @@ class MainVM @Inject constructor(
     val expensesOrIncomesSelected = savedStateHandle.getStateFlow("expensesOrIncomesSelected", 0)
 
     private var expenseLogState =
-        MutableSharedFlow<ExpenseLogState>()
+        MutableSharedFlow<ExpenseLogState>(replay = 1)
     val _expenseLogState = expenseLogState.asSharedFlow()
 
     private var incomeLogState =
-        MutableSharedFlow<IncomeLogState>()
+        MutableSharedFlow<IncomeLogState>(replay = 1)
     val _incomeLogState = incomeLogState.asSharedFlow()
 
     private var incomesReceiveState =
@@ -123,20 +124,42 @@ class MainVM @Inject constructor(
         }
     }
 
-    fun addExpenseToDb(expense: Expense) {
-        expensesUseCase.addExpenseToDb(expense) { result ->
-            viewModelScope.launch {
-                expenseLogState.emit(result)
+    fun addExpenseToDb(expense: Expense) = viewModelScope.launch {
+        if (addExpenseValidation(expense)) {
+            expensesUseCase.addExpenseToDb(expense) { result ->
+                expenseLogState.tryEmit(result)
             }
         }
     }
 
-    fun addIncomeToDb(income: Income) {
-        incomesUseCase.addIncomeToDb(income) { result ->
-            viewModelScope.launch {
-                incomeLogState.emit(result)
+    fun addIncomeToDb(income: Income) = viewModelScope.launch {
+        if (addIncomeValidation(income)) {
+            incomesUseCase.addIncomeToDb(income) { result ->
+                incomeLogState.tryEmit(result)
             }
         }
+    }
+
+    private fun addExpenseValidation(transaction: TransactionBase): Boolean {
+        if (transaction.isNullOrBlankName()) {
+            expenseLogState.tryEmit(ExpenseLogState.NameErrorExpenseLogState())
+            return false
+        } else if (transaction.amount == null ) {
+            expenseLogState.tryEmit(ExpenseLogState.AmountErrorExpenseLogState())
+            return false
+        }
+        return true
+    }
+
+    private fun addIncomeValidation(transaction: TransactionBase): Boolean {
+        if (transaction.isNullOrBlankName()) {
+            incomeLogState.tryEmit(IncomeLogState.NameErrorIncomeLogState())
+            return false
+        } else if (transaction.amount == null) {
+            incomeLogState.tryEmit(IncomeLogState.AmountErrorIncomeLogState())
+            return false
+        }
+        return true
     }
 
     fun changeSelectedMonth(diff: Int) {

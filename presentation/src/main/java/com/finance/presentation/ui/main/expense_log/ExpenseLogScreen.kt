@@ -51,6 +51,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.DialogWindowProvider
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.finance.domain.model.Expense
 import com.finance.domain.repository.ExpenseLogState
@@ -73,6 +74,15 @@ fun ExpenseLogScreen(
     viewModel: MainVM = hiltViewModel(),
     category: String?
 ) {
+
+    val expenseLogState = viewModel._expenseLogState.collectAsStateWithLifecycle(initialValue = ExpenseLogState.InitExpenseLogState)
+    when (expenseLogState.value) {
+        ExpenseLogState.SuccessExpenseLogState -> {
+            navController.popBackStack()
+        }
+        else -> {}
+    }
+
     val expenseName = remember {
         mutableStateOf("")
     }
@@ -131,7 +141,9 @@ fun ExpenseLogScreen(
         )
 
         BasicLowOutlineTextField(
-            expenseName
+            expenseNameState = expenseName,
+            isError = expenseLogState.value is ExpenseLogState.NameErrorExpenseLogState,
+            errorMessage = stringResource(id = R.string.label_field_is_empty)
         )
 
         Text(
@@ -148,8 +160,10 @@ fun ExpenseLogScreen(
         )
 
         BasicLowOutlineTextField(
-            expenseAmount,
-            KeyboardOptions(keyboardType = KeyboardType.Number)
+            expenseNameState = expenseAmount,
+            isError = expenseLogState.value is ExpenseLogState.AmountErrorExpenseLogState,
+            errorMessage = stringResource(id = R.string.label_field_is_empty),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
         )
 
         Row(
@@ -257,7 +271,7 @@ fun ExpenseLogScreen(
                     Expense(
                         expenseName = expenseName.value,
                         category = category ?: "",
-                        amount = expenseAmount.value.toInt(),
+                        amount = expenseAmount.value.toIntOrNull(),
                         dateLong = datePickerState.selectedDateMillis ?: 0L
                     )
                 )
@@ -298,17 +312,4 @@ fun ExpenseLogScreen(
             }
         }
     }
-
-    LaunchedEffect(key1 = Unit, block = {
-        viewModel._expenseLogState.collect{ state ->
-            Log.e("MyLog","IT: $state")
-            when(state){
-                ExpenseLogState.SuccessExpenseLogState -> {
-                    Log.e("MyLog","SuccessExpenseLogState")
-                    navController.popBackStack()
-                }
-                else -> {}
-            }
-        }
-    })
 }
