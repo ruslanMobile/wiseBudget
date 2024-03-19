@@ -41,7 +41,8 @@ android {
 
         release {
             buildConfigField("String", "APP_NAME", APPLICATION_NAME_DEV)
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             manifestPlaceholders = [crashlyticsCollectionEnabled: "true",  appName: "Wise budget"]
         }
