@@ -1,6 +1,5 @@
-package com.finance.presentation.ui.main.expenses_incomes
+package com.finance.presentation.ui.categories.expenses_incomes
 
-import android.util.Log
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -46,9 +45,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.finance.presentation.R
+import com.finance.presentation.model.Screen
 import com.finance.presentation.ui.custom_ui.PagerLabel
-import com.finance.presentation.ui.main.MainVM
-import com.finance.presentation.ui.main.TransitionUIState
+import com.finance.presentation.ui.categories.CategoriesVM
+import com.finance.presentation.ui.categories.TransitionUIState
 import com.finance.presentation.ui.theme.GreenDark
 import com.finance.presentation.ui.theme.GreenDark2
 import com.finance.presentation.utils.fontDimensionResource
@@ -65,7 +65,7 @@ enum class MainScreenFrontPager {
 @Composable
 fun ExpensesIncomesScreen(
     navController: NavHostController,
-    viewModel: MainVM = hiltViewModel()
+    viewModel: CategoriesVM = hiltViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     val mainScreenValues = MainScreenFrontPager.values()
@@ -157,7 +157,7 @@ fun ExpensesIncomesScreen(
                                                 )
                                             }
                                             .clickable {
-                                                navController.navigate("expense_log/${category.name}")
+                                                navController.navigate("${Screen.ExpensesLog.route}/${category.name}")
                                             },
                                         horizontalArrangement = Arrangement.SpaceBetween,
                                         verticalAlignment = Alignment.CenterVertically
@@ -267,7 +267,7 @@ fun ExpensesIncomesScreen(
                                                 )
                                             }
                                             .clickable {
-                                                navController.navigate("income_log/${category.name}")
+                                                navController.navigate("${Screen.IncomeLog.route}/${category.name}")
                                             },
                                         horizontalArrangement = Arrangement.SpaceBetween,
                                         verticalAlignment = Alignment.CenterVertically

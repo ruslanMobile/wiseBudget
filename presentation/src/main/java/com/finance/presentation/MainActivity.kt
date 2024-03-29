@@ -4,14 +4,16 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
 import androidx.navigation.compose.rememberNavController
+import com.finance.presentation.model.Screen.*
 import com.finance.presentation.ui.login.LoginScreen
 import com.finance.presentation.ui.login_or_signup.LogInOrSignUpScreen
-import com.finance.presentation.ui.main.MainScreen
+import com.finance.presentation.ui.main_screen.MainScreen
 import com.finance.presentation.ui.sign_up.SignUpScreen
 import com.finance.presentation.ui.theme.WiseBudgetTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -20,7 +22,9 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        WindowCompat.setDecorFitsSystemWindows(window, false)
+        WindowCompat.getInsetsController(window, window.decorView).apply {
+            systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        }
         setContent {
             WiseBudgetTheme {
                 val navController = rememberNavController()
@@ -29,36 +33,30 @@ class MainActivity : ComponentActivity() {
 
                 NavHost(
                     navController = navController,
-                    startDestination = if (viewModel.alreadyLoggedIn()) "mainLogic" else "auth"
+                    startDestination = if (viewModel.alreadyLoggedIn()) Main.route else "auth"
                 ) {
-                    navigation(route = "auth", startDestination = "loginOrSignup") {
-                        composable("loginOrSignup") {
+                    navigation(route = "auth", startDestination = LoginOrSignUp.route) {
+                        composable(LoginOrSignUp.route) {
                             LogInOrSignUpScreen(
                                 navController,
                                 hiltViewModel(viewModelStoreOwner = this@MainActivity)
                             )
                         }
-                        composable("login") {
+                        composable(Login.route) {
                             LoginScreen(
                                 navController,
                                 hiltViewModel(viewModelStoreOwner = this@MainActivity)
                             )
                         }
-                        composable("sign_up") {
+                        composable(SignUp.route) {
                             SignUpScreen(
                                 navController,
                                 hiltViewModel(viewModelStoreOwner = this@MainActivity)
                             )
                         }
                     }
-
-                    navigation(route = "mainLogic", startDestination = "main") {
-                        composable("main") {
-                            MainScreen(
-                                navController,
-                                hiltViewModel(viewModelStoreOwner = this@MainActivity)
-                            )
-                        }
+                    composable(Main.route) {
+                        MainScreen()
                     }
                 }
             }

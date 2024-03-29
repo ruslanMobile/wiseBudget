@@ -1,4 +1,4 @@
-package com.finance.presentation.ui.main.income_log
+package com.finance.presentation.ui.categories.income_log
 
 import android.util.Log
 import android.view.Gravity
@@ -57,7 +57,7 @@ import com.finance.domain.model.Income
 import com.finance.domain.repository.IncomeLogState
 import com.finance.presentation.R
 import com.finance.presentation.ui.custom_ui.BasicLowOutlineTextField
-import com.finance.presentation.ui.main.MainVM
+import com.finance.presentation.ui.categories.CategoriesVM
 import com.finance.presentation.ui.theme.GreenDark
 import com.finance.presentation.ui.theme.Silver
 import com.finance.presentation.utils.fontDimensionResource
@@ -70,7 +70,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun IncomeLogScreen(
     navController: NavHostController,
-    viewModel: MainVM = hiltViewModel(),
+    viewModel: CategoriesVM = hiltViewModel(),
     category: String?
 ) {
 

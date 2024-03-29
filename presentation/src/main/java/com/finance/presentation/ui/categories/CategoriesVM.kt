@@ -1,4 +1,4 @@
-package com.finance.presentation.ui.main
+package com.finance.presentation.ui.categories
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
@@ -27,7 +27,7 @@ import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class MainVM @Inject constructor(
+class CategoriesVM @Inject constructor(
     private val savedStateHandle: SavedStateHandle,
     private val categoryUseCase: BudgetCategoryUseCase,
     private val expensesUseCase: ExpensesUseCase,

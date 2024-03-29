@@ -1,4 +1,4 @@
-package com.finance.presentation.ui.main.expense_log
+package com.finance.presentation.ui.categories.expense_log
 
 import android.util.Log
 import android.view.Gravity
@@ -55,10 +55,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import com.finance.domain.model.Expense
 import com.finance.domain.repository.ExpenseLogState
-import com.finance.domain.repository.SignedState
 import com.finance.presentation.R
 import com.finance.presentation.ui.custom_ui.BasicLowOutlineTextField
-import com.finance.presentation.ui.main.MainVM
+import com.finance.presentation.ui.categories.CategoriesVM
 import com.finance.presentation.ui.theme.GreenDark
 import com.finance.presentation.ui.theme.Silver
 import com.finance.presentation.utils.fontDimensionResource
@@ -71,7 +70,7 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun ExpenseLogScreen(
     navController: NavHostController,
-    viewModel: MainVM = hiltViewModel(),
+    viewModel: CategoriesVM = hiltViewModel(),
     category: String?
 ) {
 

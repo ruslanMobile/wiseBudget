@@ -1,6 +1,5 @@
-package com.finance.presentation.ui.main
+package com.finance.presentation.ui.categories
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -31,7 +30,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -39,7 +37,6 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat.finishAffinity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -47,30 +44,26 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.finance.domain.model.Category
 import com.finance.domain.model.TransactionBase
-import com.finance.domain.repository.TransactionReceiveState
-import com.finance.presentation.MainActivity
 import com.finance.presentation.R
-import com.finance.presentation.ui.main.expense_log.ExpenseLogScreen
-import com.finance.presentation.ui.main.expenses_incomes.ExpensesIncomesScreen
-import com.finance.presentation.ui.main.expenses_incomes.MainScreenFrontPager
-import com.finance.presentation.ui.main.income_log.IncomeLogScreen
+import com.finance.presentation.model.Screen
+import com.finance.presentation.ui.categories.expense_log.ExpenseLogScreen
+import com.finance.presentation.ui.categories.expenses_incomes.ExpensesIncomesScreen
+import com.finance.presentation.ui.categories.expenses_incomes.MainScreenFrontPager
+import com.finance.presentation.ui.categories.income_log.IncomeLogScreen
 import com.finance.presentation.ui.theme.GreenDark
 import com.finance.presentation.ui.theme.Silver
 import com.finance.presentation.utils.areDatesInSameMonth
 import com.finance.presentation.utils.fontDimensionResource
 import com.finance.presentation.utils.getMonthNameFromLongDate
 
-
 @OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalMaterialApi::class,
-    ExperimentalFoundationApi::class
+    ExperimentalMaterialApi::class,
 )
 @Composable
-fun MainScreen(
+fun CategoriesScreen(
     navController: NavHostController,
-    viewModel: MainVM = hiltViewModel()
+    viewModel: CategoriesVM = hiltViewModel()
 ) {
 
     val selectedDateRange = viewModel.selectedDateRange.collectAsState()
@@ -92,15 +85,8 @@ fun MainScreen(
     }
 
 //    val suggestedDestinations by viewModel.suggestedDestinations.observeAsState()
-//
 //    val onPeopleChanged: (Int) -> Unit = { viewModel.updatePeople(it) }
 
-    val context = LocalContext.current
-    BackHandler(enabled = true) {
-        finishAffinity(context as MainActivity)
-    }
-
-    val coroutineScope = rememberCoroutineScope()
     BackdropScaffold(
         modifier = Modifier,
         scaffoldState = rememberBackdropScaffoldState(BackdropValue.Concealed),
@@ -201,11 +187,11 @@ fun MainScreen(
                 ) {
                     NavHost(
                         navController = navController,
-                        startDestination = "expenses_incomes_list"
+                        startDestination = Screen.ExpensesIncomes.route
                     ) {
 
                         composable(
-                            route = "expenses_incomes_list",
+                            route = Screen.ExpensesIncomes.route,
                             enterTransition = {
                                 slideIntoContainer(
                                     AnimatedContentTransitionScope.SlideDirection.Left,
@@ -225,7 +211,7 @@ fun MainScreen(
                             )
                         }
                         composable(
-                            "expense_log/{category}",
+                            "${Screen.ExpensesLog.route}/{category}",
                             arguments = listOf(navArgument("category") {
                                 type = NavType.StringType
                             })
@@ -237,7 +223,7 @@ fun MainScreen(
                             )
                         }
                         composable(
-                            "income_log/{category}",
+                            "${Screen.IncomeLog.route}/{category}",
                             arguments = listOf(navArgument("category") {
                                 type = NavType.StringType
                             })
