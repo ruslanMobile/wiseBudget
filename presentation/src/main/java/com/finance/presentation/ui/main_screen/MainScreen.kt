@@ -105,7 +105,7 @@ fun MainScreen(
                 }
 
                 composable(Screen.Profile.route) {
-                    ProfileScreen()
+                    ProfileScreen(hiltViewModel())
                 }
             }
         }

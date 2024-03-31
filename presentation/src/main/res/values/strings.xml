@@ -25,6 +25,7 @@
     <string name="label_email_is_incorrect">Email is incorrect</string>
     <string name="label_invalid_email_or_password_login_error">Log in failed: Invalid email or password</string>
     <string name="label_invalid_email_or_password_sign_up_error">Sign up failed: Invalid email or password</string>
+    <string name="label_logout_error">Log out failed</string>
     <string name="label_google_auth_failed">Google authentication failed</string>
     <string name="label_field_is_empty">Field is empty</string>
 
@@ -36,6 +37,7 @@
     <string name="btn_expenses">Expenses</string>
     <string name="btn_incomes">Incomes</string>
     <string name="btn_done">Done</string>
+    <string name="btn_logout">Logout</string>
 
     <string name="hint_username">Username</string>
     <string name="hint_password">Password</string>
