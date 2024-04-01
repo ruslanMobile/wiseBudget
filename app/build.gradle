@@ -150,4 +150,8 @@ dependencies {
     //Play services
     implementation 'com.google.android.gms:play-services-base:18.2.0'
     implementation 'com.google.android.gms:play-services-auth:20.7.0'
+
+    //Mockk library
+    testImplementation 'io.mockk:mockk-android:1.13.10'
+    testImplementation 'io.mockk:mockk-agent:1.13.10'
 }
