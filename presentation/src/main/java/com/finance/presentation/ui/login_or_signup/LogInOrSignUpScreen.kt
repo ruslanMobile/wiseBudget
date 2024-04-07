@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -48,9 +49,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.finance.domain.repository.LoginState
 import com.finance.presentation.R
-import com.finance.presentation.ui.theme.GreenDark
-import com.finance.presentation.ui.theme.GreenDark2
-import com.finance.presentation.ui.theme.Silver
 import com.finance.presentation.utils.fontDimensionResource
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.common.api.ApiException
@@ -91,8 +89,8 @@ fun LogInOrSignUpScreen(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            GreenDark2,
-                            GreenDark
+                            MaterialTheme.colorScheme.primaryContainer,
+                            MaterialTheme.colorScheme.inversePrimary
                         )
                     )
                 ),
@@ -107,7 +105,7 @@ fun LogInOrSignUpScreen(
                     painter = painterResource(id = R.drawable.ic_logo),
                     contentDescription = "",
                     contentScale = ContentScale.Crop,
-                    colorFilter = ColorFilter.tint(Silver),
+                    colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.primary),
                     modifier = Modifier
                         .fillMaxWidth(0.6f)
                         .aspectRatio(1f)
@@ -119,7 +117,7 @@ fun LogInOrSignUpScreen(
                     text = stringResource(id = R.string.title_app_name),
                     style = TextStyle(
                         fontSize = fontDimensionResource(id = R.dimen.text_40),
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
                         textAlign = TextAlign.Center
                     )
@@ -130,7 +128,7 @@ fun LogInOrSignUpScreen(
                     text = stringResource(id = R.string.text_first_screen_message),
                     style = TextStyle(
                         fontSize = fontDimensionResource(id = R.dimen.text_16),
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                         textAlign = TextAlign.Center
                     ),
@@ -141,8 +139,8 @@ fun LogInOrSignUpScreen(
                         navController.navigate("login")
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Silver,
-                        contentColor = GreenDark
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     ),
                     modifier = Modifier
                         .padding(0.dp, dimensionResource(id = R.dimen.offset_32))
@@ -162,12 +160,12 @@ fun LogInOrSignUpScreen(
                     onClick = {
                         navController.navigate("sign_up")
                     },
-                    border = BorderStroke(dimensionResource(id = R.dimen.offset_2), Silver),
+                    border = BorderStroke(dimensionResource(id = R.dimen.offset_2), MaterialTheme.colorScheme.primary),
                     modifier = Modifier
                         .fillMaxWidth(0.85f),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Transparent,
-                        contentColor = Color.White
+                        contentColor = MaterialTheme.colorScheme.onPrimaryContainer
                     )
                 ) {
                     Text(
@@ -190,14 +188,14 @@ fun LogInOrSignUpScreen(
                         modifier = Modifier
                             .height(dimensionResource(id = R.dimen.offset_2))
                             .weight(1f)
-                            .background(Silver)
+                            .background(MaterialTheme.colorScheme.primary)
                     ) {}
                     Text(
                         modifier = Modifier.weight(2f),
                         text = stringResource(id = R.string.label_or_continue_with),
                         style = TextStyle(
                             fontSize = fontDimensionResource(id = R.dimen.text_14),
-                            color = Silver,
+                            color = MaterialTheme.colorScheme.primary,
                             fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
                             textAlign = TextAlign.Center
                         )
@@ -206,7 +204,7 @@ fun LogInOrSignUpScreen(
                         modifier = Modifier
                             .height(dimensionResource(id = R.dimen.offset_2))
                             .weight(1f)
-                            .background(Silver)
+                            .background(MaterialTheme.colorScheme.primary)
                     ) {}
                 }
 
@@ -219,7 +217,7 @@ fun LogInOrSignUpScreen(
                         .size(dimensionResource(id = R.dimen.offset_56))
                         .shadow(dimensionResource(id = R.dimen.offset_4), CircleShape)
                         .clip(CircleShape)
-                        .background(Silver)
+                        .background(MaterialTheme.colorScheme.secondary)
                         .padding(dimensionResource(id = R.dimen.offset_12))
                 ) {
                     Icon(

@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
@@ -27,8 +28,6 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.finance.presentation.R
-import com.finance.presentation.ui.theme.GreenDark2
-import com.finance.presentation.ui.theme.Silver
 import com.finance.presentation.utils.fontDimensionResource
 
 @Composable
@@ -49,11 +48,14 @@ fun BasicAuthTextField(
             value = state.value,
             singleLine = true,
             cursorBrush = Brush.verticalGradient(
-                listOf(Color.White, Color.White)
+                listOf(
+                    MaterialTheme.colorScheme.primary,
+                    MaterialTheme.colorScheme.primary
+                )
             ),
             visualTransformation = visualTransformation,
             textStyle = TextStyle(
-                color = Color.White,
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 fontSize = fontDimensionResource(id = R.dimen.text_16)
             ),
             decorationBox = { innerTextField ->
@@ -71,11 +73,16 @@ fun BasicAuthTextField(
                         painter = painterResource(id = startIcon),
                         modifier = Modifier.size(dimensionResource(id = R.dimen.offset_20)),
                         contentDescription = "",
-                        tint = Silver
+                        tint = MaterialTheme.colorScheme.primary
                     )
                     Spacer(modifier = Modifier.padding(3.dp))
-                    if (state.value.isEmpty())
-                        Text(text = stringResource(id = hintText))
+                    if (state.value.isEmpty()) {
+                        Text(
+                            text = stringResource(id = hintText), style = TextStyle(
+                                fontSize = fontDimensionResource(id = R.dimen.text_16)
+                            )
+                        )
+                    }
                     innerTextField()
                 }
             },
@@ -83,13 +90,13 @@ fun BasicAuthTextField(
                 state.value = value
             })
 
-        if(isError) {
+        if (isError) {
             Text(
                 modifier = Modifier.padding(start = dimensionResource(id = R.dimen.offset_6)),
                 text = errorMessage,
                 style = TextStyle(
                     fontSize = fontDimensionResource(id = R.dimen.text_12),
-                    color = Color.Red,
+                    color = MaterialTheme.colorScheme.error,
                     fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                     textAlign = TextAlign.Start
                 ),

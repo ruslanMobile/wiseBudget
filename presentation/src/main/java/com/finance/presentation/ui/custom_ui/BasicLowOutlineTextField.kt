@@ -9,10 +9,12 @@ import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
@@ -39,6 +41,13 @@ fun BasicLowOutlineTextField(
             onValueChange = { value ->
                 expenseNameState.value = value
             },
+            cursorBrush = Brush.verticalGradient(
+                listOf(
+                    MaterialTheme.colorScheme.onPrimaryContainer,
+                    MaterialTheme.colorScheme.onPrimaryContainer
+                )
+            ),
+            textStyle = TextStyle(color = MaterialTheme.colorScheme.onPrimaryContainer),
             modifier = Modifier
                 .fillMaxWidth()
                 .height(40.dp)
@@ -52,9 +61,9 @@ fun BasicLowOutlineTextField(
                 innerTextField = innerTextField,
                 enabled = true,
                 colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Black,
-                    unfocusedBorderColor = Color.Black,
-                    cursorColor = Color.Black
+                    focusedBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    unfocusedBorderColor = MaterialTheme.colorScheme.onPrimaryContainer,
+                    cursorColor = MaterialTheme.colorScheme.onPrimaryContainer
                 ),
                 singleLine = true,
                 visualTransformation = VisualTransformation.None,
@@ -67,13 +76,13 @@ fun BasicLowOutlineTextField(
             )
         }
 
-        if(isError) {
+        if (isError) {
             Text(
                 modifier = Modifier.padding(start = dimensionResource(id = R.dimen.offset_6)),
                 text = errorMessage,
                 style = TextStyle(
                     fontSize = fontDimensionResource(id = R.dimen.text_12),
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.error,
                     fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                     textAlign = TextAlign.Start
                 ),

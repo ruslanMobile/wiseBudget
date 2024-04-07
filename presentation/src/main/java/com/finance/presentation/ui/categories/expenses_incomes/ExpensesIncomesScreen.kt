@@ -23,6 +23,7 @@ import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.Text
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -49,8 +50,6 @@ import com.finance.presentation.model.Screen
 import com.finance.presentation.ui.custom_ui.PagerLabel
 import com.finance.presentation.ui.categories.CategoriesVM
 import com.finance.presentation.ui.categories.TransitionUIState
-import com.finance.presentation.ui.theme.GreenDark
-import com.finance.presentation.ui.theme.GreenDark2
 import com.finance.presentation.utils.fontDimensionResource
 import kotlinx.coroutines.launch
 
@@ -119,6 +118,7 @@ fun ExpensesIncomesScreen(
             }
         }
         HorizontalPager(state = pagerState) { page ->
+            val colorOnPrContainer = MaterialTheme.colorScheme.onPrimaryContainer
             when (mainScreenValues[page]) {
                 MainScreenFrontPager.EXPENSES -> {
                     when (expensesReceiveState.value) {
@@ -146,7 +146,7 @@ fun ExpensesIncomesScreen(
                                             .padding(horizontal = dimensionResource(id = R.dimen.offset_26))
                                             .drawBehind {
                                                 drawLine(
-                                                    color = GreenDark2,
+                                                    color = colorOnPrContainer,
                                                     start = Offset(
                                                         size.width / 5,
                                                         size.height
@@ -169,7 +169,7 @@ fun ExpensesIncomesScreen(
                                             Icon(
                                                 painter = painterResource(id = category.icon),
                                                 contentDescription = "",
-                                                tint = Color.Unspecified,
+                                                tint = MaterialTheme.colorScheme.onPrimaryContainer,
                                                 modifier = Modifier
                                                     .size(dimensionResource(id = R.dimen.offset_32))
                                             )
@@ -180,7 +180,7 @@ fun ExpensesIncomesScreen(
                                             fontWeight = FontWeight(500),
                                             style = TextStyle(
                                                 fontSize = fontDimensionResource(id = R.dimen.text_16),
-                                                color = GreenDark,
+                                                color = MaterialTheme.colorScheme.onPrimaryContainer,
                                                 fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
                                                 textAlign = TextAlign.Start
                                             ),
@@ -195,7 +195,7 @@ fun ExpensesIncomesScreen(
                                                 text = "$${category.list?.sumOf { it.amount ?: 0 }}",
                                                 style = TextStyle(
                                                     fontSize = fontDimensionResource(id = R.dimen.text_16),
-                                                    color = GreenDark,
+                                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                                                     fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
                                                 )
                                             )
@@ -203,7 +203,7 @@ fun ExpensesIncomesScreen(
                                                 text = (category.list?.size ?: 0).toString(),
                                                 style = TextStyle(
                                                     fontSize = fontDimensionResource(id = R.dimen.text_12),
-                                                    color = GreenDark2,
+                                                    color = MaterialTheme.colorScheme.secondary,
                                                     fontFamily = FontFamily(Font(resId = R.font.chakra_petch_medium)),
                                                 )
                                             )
@@ -221,7 +221,7 @@ fun ExpensesIncomesScreen(
                                     modifier = Modifier
                                         .padding(top = dimensionResource(id = R.dimen.offset_32))
                                         .align(Alignment.Center),
-                                    color = GreenDark
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer
                                 )
                             }
                         }
@@ -256,7 +256,7 @@ fun ExpensesIncomesScreen(
                                             .padding(horizontal = dimensionResource(id = R.dimen.offset_26))
                                             .drawBehind {
                                                 drawLine(
-                                                    color = GreenDark2,
+                                                    color = colorOnPrContainer,
                                                     start = Offset(
                                                         size.width / 5,
                                                         size.height
@@ -279,7 +279,7 @@ fun ExpensesIncomesScreen(
                                             Icon(
                                                 painter = painterResource(id = category.icon),
                                                 contentDescription = "",
-                                                tint = Color.Unspecified,
+                                                tint = MaterialTheme.colorScheme.onPrimaryContainer,
                                                 modifier = Modifier
                                                     .size(dimensionResource(id = R.dimen.offset_32))
                                             )
@@ -290,7 +290,7 @@ fun ExpensesIncomesScreen(
                                             fontWeight = FontWeight(500),
                                             style = TextStyle(
                                                 fontSize = fontDimensionResource(id = R.dimen.text_16),
-                                                color = GreenDark,
+                                                color = MaterialTheme.colorScheme.onPrimaryContainer,
                                                 fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
                                                 textAlign = TextAlign.Start
                                             ),
@@ -305,7 +305,7 @@ fun ExpensesIncomesScreen(
                                                 text = "$${category.list?.sumOf { it.amount ?: 0 } ?: 0}",
                                                 style = TextStyle(
                                                     fontSize = fontDimensionResource(id = R.dimen.text_16),
-                                                    color = GreenDark,
+                                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
                                                     fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
                                                 )
                                             )
@@ -313,7 +313,7 @@ fun ExpensesIncomesScreen(
                                                 text = (category.list?.size ?: 0).toString(),
                                                 style = TextStyle(
                                                     fontSize = fontDimensionResource(id = R.dimen.text_12),
-                                                    color = GreenDark2,
+                                                    color = MaterialTheme.colorScheme.secondary,
                                                     fontFamily = FontFamily(Font(resId = R.font.chakra_petch_medium)),
                                                 )
                                             )
@@ -331,7 +331,7 @@ fun ExpensesIncomesScreen(
                                     modifier = Modifier
                                         .padding(top = dimensionResource(id = R.dimen.offset_32))
                                         .align(Alignment.Center),
-                                    color = GreenDark
+                                    color = MaterialTheme.colorScheme.onPrimaryContainer
                                 )
                             }
                         }

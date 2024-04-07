@@ -16,12 +16,14 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
@@ -36,10 +38,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.finance.domain.repository.LogoutState
 import com.finance.presentation.MainActivity
 import com.finance.presentation.R
-import com.finance.presentation.ui.theme.GreenDark
-import com.finance.presentation.ui.theme.GreenDark2
-import com.finance.presentation.ui.theme.GreenLight
-import com.finance.presentation.ui.theme.Silver
 import com.finance.presentation.utils.fontDimensionResource
 
 @Composable
@@ -71,12 +69,18 @@ fun ProfileScreen(
     Surface(
         modifier = Modifier
             .fillMaxSize(),
-        color = Silver
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Silver)
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.primaryContainer,
+                            MaterialTheme.colorScheme.inversePrimary
+                        )
+                    )
+                )
                 .padding(top = dimensionResource(id = R.dimen.offset_32)),
             verticalArrangement = Arrangement.Top
         ) {
@@ -86,7 +90,7 @@ fun ProfileScreen(
                     .fillMaxWidth()
                     .wrapContentHeight()
                     .clip(shape = RoundedCornerShape(dimensionResource(id = R.dimen.offset_16)))
-                    .background(GreenDark2)
+                    .background(MaterialTheme.colorScheme.onPrimaryContainer)
                     .clickable {
                         viewModel.logOut()
                     }
@@ -100,21 +104,21 @@ fun ProfileScreen(
                         modifier = Modifier
                             .padding(start = dimensionResource(id = R.dimen.offset_16))
                             .clip(shape = RoundedCornerShape(dimensionResource(id = R.dimen.offset_10)))
-                            .background(GreenLight)
+                            .background(MaterialTheme.colorScheme.secondaryContainer)
                             .padding(dimensionResource(id = R.dimen.offset_6))
                     ) {
                         Icon(
                             modifier = Modifier.size(dimensionResource(id = R.dimen.offset_32)),
                             painter = painterResource(id = R.drawable.ic_logout),
                             contentDescription = "",
-                            tint = GreenDark2
+                            tint = MaterialTheme.colorScheme.onSecondaryContainer
                         )
                     }
                     Text(
                         modifier = Modifier.padding(start = dimensionResource(id = R.dimen.offset_16)),
                         text = stringResource(id = R.string.btn_logout), style = TextStyle(
                             fontSize = fontDimensionResource(id = R.dimen.text_18),
-                            color = Silver,
+                            color = MaterialTheme.colorScheme.onPrimary,
                             fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
                             textAlign = TextAlign.Center
                         )
@@ -131,7 +135,7 @@ fun ProfileScreen(
                     modifier = Modifier
                         .size(dimensionResource(id = R.dimen.offset_56))
                         .align(Alignment.Center),
-                    color = GreenDark
+                    color = MaterialTheme.colorScheme.secondary
                 )
             }
         }

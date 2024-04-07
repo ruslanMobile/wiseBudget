@@ -19,6 +19,7 @@ import androidx.compose.material.Text
 import androidx.compose.material.rememberBackdropScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
@@ -51,8 +52,6 @@ import com.finance.presentation.ui.categories.expense_log.ExpenseLogScreen
 import com.finance.presentation.ui.categories.expenses_incomes.ExpensesIncomesScreen
 import com.finance.presentation.ui.categories.expenses_incomes.MainScreenFrontPager
 import com.finance.presentation.ui.categories.income_log.IncomeLogScreen
-import com.finance.presentation.ui.theme.GreenDark
-import com.finance.presentation.ui.theme.Silver
 import com.finance.presentation.utils.areDatesInSameMonth
 import com.finance.presentation.utils.fontDimensionResource
 import com.finance.presentation.utils.getMonthNameFromLongDate
@@ -95,8 +94,8 @@ fun CategoriesScreen(
             topEnd = dimensionResource(id = R.dimen.offset_20)
         ),
         frontLayerScrimColor = Color.Unspecified,
-        frontLayerBackgroundColor = Silver,
-        backLayerBackgroundColor = GreenDark,
+        frontLayerBackgroundColor = MaterialTheme.colorScheme.primaryContainer,
+        backLayerBackgroundColor = MaterialTheme.colorScheme.surfaceTint,
         peekHeight = 20.dp,
         headerHeight = dimensionResource(id = R.dimen.offset_120),
         stickyFrontLayer = true,
@@ -122,7 +121,7 @@ fun CategoriesScreen(
                     }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_round_arrow_left),
-                            tint = Silver,
+                            tint = MaterialTheme.colorScheme.onPrimary,
                             contentDescription = "",
                             modifier = Modifier
                                 .size(dimensionResource(id = R.dimen.offset_40))
@@ -139,7 +138,7 @@ fun CategoriesScreen(
                             text = getMonthNameFromLongDate(selectedDateRange.value),
                             style = TextStyle(
                                 fontSize = fontDimensionResource(id = R.dimen.text_26),
-                                color = Color.White,
+                                color = MaterialTheme.colorScheme.onPrimary,
                                 fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                                 textAlign = TextAlign.Center
                             )
@@ -149,7 +148,7 @@ fun CategoriesScreen(
                             text = "$${overallAmountOfMoney.value}",
                             style = TextStyle(
                                 fontSize = fontDimensionResource(id = R.dimen.text_48),
-                                color = Color.White,
+                                color = MaterialTheme.colorScheme.inversePrimary,
                                 fontFamily = FontFamily(Font(resId = R.font.chakra_petch_bold)),
                                 textAlign = TextAlign.Center
                             )
@@ -161,7 +160,7 @@ fun CategoriesScreen(
                     }) {
                         Icon(
                             painter = painterResource(id = R.drawable.ic_round_arrow_left),
-                            tint = Silver,
+                            tint = MaterialTheme.colorScheme.onPrimary,
                             contentDescription = "",
                             modifier = Modifier
                                 .size(dimensionResource(id = R.dimen.offset_40))

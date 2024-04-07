@@ -34,8 +34,6 @@ import com.finance.presentation.model.BottomNavItem
 import com.finance.presentation.model.Screen
 import com.finance.presentation.ui.categories.CategoriesScreen
 import com.finance.presentation.ui.profile.ProfileScreen
-import com.finance.presentation.ui.theme.GreenDark
-import com.finance.presentation.ui.theme.Silver
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -66,8 +64,8 @@ fun MainScreen(
                     topRight = dimensionResource(id = R.dimen.offset_20),
                     bottomLeft = 0.dp, bottomRight = 0.dp
                 ),
-                barColor = GreenDark,
-                ballColor = GreenDark
+                barColor = MaterialTheme.colorScheme.surface,
+                ballColor = MaterialTheme.colorScheme.surface
             ) {
 
                 BottomNavItem.values().forEach { item ->
@@ -83,7 +81,7 @@ fun MainScreen(
                         Icon(
                             contentDescription = null,
                             imageVector = item.icon,
-                            tint = if (selectedIndex.value == item.ordinal) Color.White else Silver,
+                            tint = if (selectedIndex.value == item.ordinal) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.size(dimensionResource(id = R.dimen.offset_26))
                         )
                     }

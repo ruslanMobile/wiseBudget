@@ -25,6 +25,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
@@ -35,6 +36,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.dimensionResource
@@ -58,8 +60,6 @@ import com.finance.domain.repository.ExpenseLogState
 import com.finance.presentation.R
 import com.finance.presentation.ui.custom_ui.BasicLowOutlineTextField
 import com.finance.presentation.ui.categories.CategoriesVM
-import com.finance.presentation.ui.theme.GreenDark
-import com.finance.presentation.ui.theme.Silver
 import com.finance.presentation.utils.fontDimensionResource
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import java.time.Instant
@@ -103,6 +103,7 @@ fun ExpenseLogScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
+                color = MaterialTheme.colorScheme.onPrimaryContainer,
                 text = stringResource(id = R.string.label_add_expense),
                 fontSize = fontDimensionResource(
                     id = R.dimen.text_18
@@ -113,6 +114,7 @@ fun ExpenseLogScreen(
                 navController.popBackStack()
             }) {
                 Icon(
+                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
                     painter = painterResource(id = R.drawable.ic_close),
                     contentDescription = "",
                     modifier = Modifier.size(dimensionResource(id = R.dimen.offset_26))
@@ -124,7 +126,7 @@ fun ExpenseLogScreen(
             text = stringResource(id = R.string.label_expense_name),
             style = TextStyle(
                 fontSize = fontDimensionResource(id = R.dimen.text_12),
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.secondary,
                 fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                 textAlign = TextAlign.Start
             ),
@@ -143,7 +145,7 @@ fun ExpenseLogScreen(
             text = stringResource(id = R.string.label_amount),
             style = TextStyle(
                 fontSize = fontDimensionResource(id = R.dimen.text_12),
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.secondary,
                 fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                 textAlign = TextAlign.Start
             ),
@@ -170,7 +172,7 @@ fun ExpenseLogScreen(
                 text = stringResource(id = R.string.label_category_dots),
                 style = TextStyle(
                     fontSize = fontDimensionResource(id = R.dimen.text_12),
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.secondary,
                     fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                     textAlign = TextAlign.Start
                 ),
@@ -180,14 +182,14 @@ fun ExpenseLogScreen(
                 text = category ?: "",
                 style = TextStyle(
                     fontSize = fontDimensionResource(id = R.dimen.text_10),
-                    color = Silver,
+                    color = MaterialTheme.colorScheme.onPrimary,
                     fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                     textAlign = TextAlign.Start
                 ),
                 modifier = Modifier
                     .padding(start = dimensionResource(id = R.dimen.offset_6))
                     .background(
-                        color = GreenDark, RoundedCornerShape(
+                        color = MaterialTheme.colorScheme.secondary, RoundedCornerShape(
                             dimensionResource(id = R.dimen.offset_6)
                         )
                     )
@@ -199,7 +201,7 @@ fun ExpenseLogScreen(
             text = stringResource(id = R.string.label_date),
             style = TextStyle(
                 fontSize = fontDimensionResource(id = R.dimen.text_12),
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.secondary,
                 fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                 textAlign = TextAlign.Start
             ),
@@ -233,7 +235,8 @@ fun ExpenseLogScreen(
                         R.drawable.bg_expense_log_date
                     )
                 ),
-                contentDescription = ""
+                contentDescription = "",
+                colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.secondary)
             )
             Text(
                 text = stringResource(
@@ -243,7 +246,7 @@ fun ExpenseLogScreen(
                 ),
                 style = TextStyle(
                     fontSize = fontDimensionResource(id = R.dimen.text_14),
-                    color = Color.Black,
+                    color = MaterialTheme.colorScheme.primary,
                     fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                     textAlign = TextAlign.Start,
                     lineHeightStyle = LineHeightStyle(
@@ -269,18 +272,19 @@ fun ExpenseLogScreen(
                     )
                 )
             },
-            border = BorderStroke(dimensionResource(id = R.dimen.offset_2), GreenDark),
+            border = BorderStroke(dimensionResource(id = R.dimen.offset_2), MaterialTheme.colorScheme.primary),
             modifier = Modifier
                 .fillMaxWidth(0.85f)
                 .padding(top = dimensionResource(id = R.dimen.offset_32)),
             colors = ButtonDefaults.buttonColors(
                 containerColor = Color.Transparent,
-                contentColor = Color.White
+                contentColor = MaterialTheme.colorScheme.primary
             )
         ) {
             Text(
                 text = stringResource(id = R.string.btn_done).uppercase(),
                 style = TextStyle(
+                    color = MaterialTheme.colorScheme.primary,
                     fontSize = fontDimensionResource(id = R.dimen.text_16),
                     fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                 ),

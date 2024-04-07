@@ -19,6 +19,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,9 +47,6 @@ import androidx.navigation.NavHostController
 import com.finance.domain.repository.LoginState
 import com.finance.presentation.R
 import com.finance.presentation.ui.custom_ui.BasicAuthTextField
-import com.finance.presentation.ui.theme.GreenDark
-import com.finance.presentation.ui.theme.GreenDark2
-import com.finance.presentation.ui.theme.Silver
 import com.finance.presentation.utils.fontDimensionResource
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,14 +56,21 @@ fun LoginScreen(
     viewModel: LoginVM = hiltViewModel()
 ) {
 
-    val loginState = viewModel._loginUpState.collectAsStateWithLifecycle(initialValue = LoginState.DefaultLogin)
+    val loginState =
+        viewModel._loginUpState.collectAsStateWithLifecycle(initialValue = LoginState.DefaultLogin)
     when (loginState.value) {
         is LoginState.SuccessLogin -> {
             navController.navigate("main")
         }
+
         is LoginState.FailLogin -> {
-            Toast.makeText(LocalContext.current, stringResource(id = R.string.label_invalid_email_or_password_login_error), LENGTH_SHORT).show()
+            Toast.makeText(
+                LocalContext.current,
+                stringResource(id = R.string.label_invalid_email_or_password_login_error),
+                LENGTH_SHORT
+            ).show()
         }
+
         else -> {}
     }
 
@@ -86,8 +91,8 @@ fun LoginScreen(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            GreenDark2,
-                            GreenDark
+                            MaterialTheme.colorScheme.primaryContainer,
+                            MaterialTheme.colorScheme.inversePrimary
                         )
                     )
                 ),
@@ -103,7 +108,7 @@ fun LoginScreen(
                     text = stringResource(id = R.string.title_welcome_back),
                     style = TextStyle(
                         fontSize = fontDimensionResource(id = R.dimen.text_40),
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
                         textAlign = TextAlign.Center
                     )
@@ -114,7 +119,7 @@ fun LoginScreen(
                     text = stringResource(id = R.string.label_login_to_your_account),
                     style = TextStyle(
                         fontSize = fontDimensionResource(id = R.dimen.text_16),
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                         textAlign = TextAlign.Center
                     ),
@@ -124,7 +129,12 @@ fun LoginScreen(
                     startIcon = R.drawable.ic_user,
                     modifier = Modifier.padding(top = dimensionResource(id = R.dimen.offset_56)),
                     hintText = R.string.hint_email,
-                    borderBrush = Brush.horizontalGradient(listOf(GreenDark2, Silver)),
+                    borderBrush = Brush.horizontalGradient(
+                        listOf(
+                            MaterialTheme.colorScheme.onPrimaryContainer,
+                            MaterialTheme.colorScheme.primary
+                        )
+                    ),
                     isError = loginState.value is LoginState.EmailIncorrect,
                     errorMessage = stringResource(id = R.string.label_email_is_incorrect)
                 )
@@ -134,7 +144,12 @@ fun LoginScreen(
                     startIcon = R.drawable.ic_password,
                     modifier = Modifier.padding(0.dp, dimensionResource(id = R.dimen.offset_26)),
                     hintText = R.string.hint_password,
-                    borderBrush = Brush.horizontalGradient(listOf(Silver, GreenDark2)),
+                    borderBrush = Brush.horizontalGradient(
+                        listOf(
+                            MaterialTheme.colorScheme.primary,
+                            MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    ),
                     visualTransformation = PasswordVisualTransformation(),
                     isError = loginState.value is LoginState.PasswordIncorrect,
                     errorMessage = stringResource(id = R.string.label_password_is_short)
@@ -152,8 +167,8 @@ fun LoginScreen(
                         viewModel.loginWithEmail(usernameState.value, passwordState.value)
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Silver,
-                        contentColor = GreenDark
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary,
                     ),
                     modifier = Modifier
                         .fillMaxWidth(0.85f)
@@ -175,6 +190,7 @@ fun LoginScreen(
                         text = stringResource(id = R.string.label_dont_have_an_account),
                         style = TextStyle(
                             fontSize = fontDimensionResource(id = R.dimen.text_12),
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
                             fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                         ),
                     )
@@ -185,7 +201,7 @@ fun LoginScreen(
                             fontSize = fontDimensionResource(id = R.dimen.text_12),
                             fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                             textDecoration = TextDecoration.Underline,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.secondary
                         ),
                         onClick = {
                             navController.navigate("sign_up")
@@ -194,7 +210,7 @@ fun LoginScreen(
                 }
             }
         }
-        if(loginState.value is LoginState.LoadingLogin) {
+        if (loginState.value is LoginState.LoadingLogin) {
             Box(
                 modifier = Modifier.fillMaxWidth(),
             ) {
@@ -202,7 +218,7 @@ fun LoginScreen(
                     modifier = Modifier
                         .size(dimensionResource(id = R.dimen.offset_56))
                         .align(Alignment.Center),
-                    color = GreenDark
+                    color = MaterialTheme.colorScheme.secondary
                 )
             }
         }

@@ -2,6 +2,7 @@ package com.finance.presentation.ui.custom_ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
@@ -13,8 +14,6 @@ import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import com.finance.presentation.R
-import com.finance.presentation.ui.theme.GreenDark
-import com.finance.presentation.ui.theme.GreenDark2
 import com.finance.presentation.utils.fontDimensionResource
 
 @Composable
@@ -26,6 +25,7 @@ fun PagerLabel(
 ) {
     val bottomBorder =
         dimensionResource(id = R.dimen.offset_4).value
+    val drawLineColor = MaterialTheme.colorScheme.onSurface
 
     Text(
         text = text,
@@ -34,13 +34,13 @@ fun PagerLabel(
         ) else FontWeight(500),
         style = TextStyle(
             fontSize = fontDimensionResource(id = R.dimen.text_20),
-            color = if (isSelected) Color.Black else GreenDark
+            color = if (isSelected) MaterialTheme.colorScheme.onSurface else MaterialTheme.colorScheme.onSurfaceVariant
         ),
         modifier = Modifier
             .drawBehind {
                 if (isSelected) {
                     drawLine(
-                        color = GreenDark2,
+                        color = drawLineColor,
                         alpha = animVal,
                         start = Offset(
                             0f,

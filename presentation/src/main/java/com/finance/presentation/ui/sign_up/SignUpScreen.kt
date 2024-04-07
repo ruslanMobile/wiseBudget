@@ -16,6 +16,7 @@ import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -42,9 +43,6 @@ import androidx.navigation.NavHostController
 import com.finance.domain.repository.SignedState
 import com.finance.presentation.R
 import com.finance.presentation.ui.custom_ui.BasicAuthTextField
-import com.finance.presentation.ui.theme.GreenDark
-import com.finance.presentation.ui.theme.GreenDark2
-import com.finance.presentation.ui.theme.Silver
 import com.finance.presentation.utils.fontDimensionResource
 
 @Composable
@@ -58,12 +56,15 @@ fun SignUpScreen(
         is SignedState.SuccessSignUp -> {
             navController.navigate("main")
         }
+
         is SignedState.FailSignUp -> {
             Toast.makeText(
-                LocalContext.current, stringResource(id = R.string.label_invalid_email_or_password_sign_up_error),
+                LocalContext.current,
+                stringResource(id = R.string.label_invalid_email_or_password_sign_up_error),
                 Toast.LENGTH_SHORT
             ).show()
         }
+
         else -> {}
     }
 
@@ -88,8 +89,8 @@ fun SignUpScreen(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            GreenDark2,
-                            GreenDark
+                            MaterialTheme.colorScheme.primaryContainer,
+                            MaterialTheme.colorScheme.inversePrimary
                         )
                     )
                 ),
@@ -105,7 +106,7 @@ fun SignUpScreen(
                     text = stringResource(id = R.string.title_register),
                     style = TextStyle(
                         fontSize = fontDimensionResource(id = R.dimen.text_40),
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
                         textAlign = TextAlign.Center
                     )
@@ -116,7 +117,7 @@ fun SignUpScreen(
                     text = stringResource(id = R.string.label_create_your_account),
                     style = TextStyle(
                         fontSize = fontDimensionResource(id = R.dimen.text_16),
-                        color = Color.White,
+                        color = MaterialTheme.colorScheme.onPrimaryContainer,
                         fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                         textAlign = TextAlign.Center
                     ),
@@ -126,7 +127,12 @@ fun SignUpScreen(
                     startIcon = R.drawable.ic_user,
                     modifier = Modifier.padding(top = dimensionResource(id = R.dimen.offset_56)),
                     hintText = R.string.hint_email,
-                    borderBrush = Brush.horizontalGradient(listOf(GreenDark2, Silver)),
+                    borderBrush = Brush.horizontalGradient(
+                        listOf(
+                            MaterialTheme.colorScheme.onPrimaryContainer,
+                            MaterialTheme.colorScheme.primary
+                        )
+                    ),
                     isError = signUpState.value is SignedState.EmailIncorrect,
                     errorMessage = stringResource(id = R.string.label_email_is_incorrect)
                 )
@@ -136,7 +142,12 @@ fun SignUpScreen(
                     startIcon = R.drawable.ic_password,
                     modifier = Modifier.padding(top = dimensionResource(id = R.dimen.offset_26)),
                     hintText = R.string.hint_password,
-                    borderBrush = Brush.horizontalGradient(listOf(Silver, GreenDark2)),
+                    borderBrush = Brush.horizontalGradient(
+                        listOf(
+                            MaterialTheme.colorScheme.onPrimaryContainer,
+                            MaterialTheme.colorScheme.primary
+                        )
+                    ),
                     visualTransformation = PasswordVisualTransformation(),
                     isError = signUpState.value is SignedState.PasswordIncorrect,
                     errorMessage = stringResource(id = R.string.label_password_is_short)
@@ -147,7 +158,12 @@ fun SignUpScreen(
                     startIcon = R.drawable.ic_password,
                     modifier = Modifier.padding(top = dimensionResource(id = R.dimen.offset_26)),
                     hintText = R.string.hint_repeat_password,
-                    borderBrush = Brush.horizontalGradient(listOf(GreenDark2, Silver)),
+                    borderBrush = Brush.horizontalGradient(
+                        listOf(
+                            MaterialTheme.colorScheme.onPrimaryContainer,
+                            MaterialTheme.colorScheme.primary
+                        )
+                    ),
                     visualTransformation = PasswordVisualTransformation(),
                     isError = signUpState.value is SignedState.RepeatPasswordIncorrect,
                     errorMessage = stringResource(id = R.string.label_passwords_did_not_match)
@@ -162,11 +178,15 @@ fun SignUpScreen(
             ) {
                 Button(
                     onClick = {
-                        viewModel.signUpWithEmail(usernameState.value, passwordState.value, repeatPasswordState.value)
+                        viewModel.signUpWithEmail(
+                            usernameState.value,
+                            passwordState.value,
+                            repeatPasswordState.value
+                        )
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Silver,
-                        contentColor = GreenDark
+                        containerColor = MaterialTheme.colorScheme.primary,
+                        contentColor = MaterialTheme.colorScheme.onPrimary
                     ),
                     modifier = Modifier
                         .fillMaxWidth(0.85f)
@@ -187,6 +207,7 @@ fun SignUpScreen(
                     Text(
                         text = stringResource(id = R.string.label_already_have_an_account),
                         style = TextStyle(
+                            color = MaterialTheme.colorScheme.onPrimaryContainer,
                             fontSize = fontDimensionResource(id = R.dimen.text_12),
                             fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                         ),
@@ -198,7 +219,7 @@ fun SignUpScreen(
                             fontSize = fontDimensionResource(id = R.dimen.text_12),
                             fontFamily = FontFamily(Font(resId = R.font.chakra_petch_regular)),
                             textDecoration = TextDecoration.Underline,
-                            color = Color.White
+                            color = MaterialTheme.colorScheme.secondary
                         ),
                         onClick = {
                             navController.navigate("login")
@@ -207,7 +228,7 @@ fun SignUpScreen(
                 }
             }
         }
-        if(signUpState.value is SignedState.LoadingSignUp) {
+        if (signUpState.value is SignedState.LoadingSignUp) {
             Box(
                 modifier = Modifier.fillMaxWidth(),
             ) {
@@ -215,7 +236,7 @@ fun SignUpScreen(
                     modifier = Modifier
                         .size(dimensionResource(id = R.dimen.offset_56))
                         .align(Alignment.Center),
-                    color = GreenDark
+                    color = MaterialTheme.colorScheme.secondary
                 )
             }
         }

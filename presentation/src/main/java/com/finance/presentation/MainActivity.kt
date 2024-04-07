@@ -26,7 +26,7 @@ class MainActivity : ComponentActivity() {
             systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
         setContent {
-            WiseBudgetTheme {
+            WiseBudgetTheme(darkTheme = false) {
                 val navController = rememberNavController()
                 val viewModel: MainActivityVM =
                     hiltViewModel(viewModelStoreOwner = this@MainActivity)
