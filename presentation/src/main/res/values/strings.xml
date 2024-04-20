@@ -28,6 +28,7 @@
     <string name="label_logout_error">Log out failed</string>
     <string name="label_google_auth_failed">Google authentication failed</string>
     <string name="label_field_is_empty">Field is empty</string>
+    <string name="label_month_budget">Month budget</string>
 
     <string name="btn_login">login</string>
     <string name="btn_sign_up">sign up</string>

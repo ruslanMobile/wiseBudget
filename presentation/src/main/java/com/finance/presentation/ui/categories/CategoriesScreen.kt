@@ -3,12 +3,14 @@ package com.finance.presentation.ui.categories
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.BackdropScaffold
@@ -29,10 +31,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -52,7 +58,10 @@ import com.finance.presentation.ui.categories.expense_log.ExpenseLogScreen
 import com.finance.presentation.ui.categories.expenses_incomes.ExpensesIncomesScreen
 import com.finance.presentation.ui.categories.expenses_incomes.MainScreenFrontPager
 import com.finance.presentation.ui.categories.income_log.IncomeLogScreen
+import com.finance.presentation.ui.custom_ui.CustomProgressBar
+import com.finance.presentation.ui.theme.shadow_5
 import com.finance.presentation.utils.areDatesInSameMonth
+import com.finance.presentation.utils.calculateExpensePercentage
 import com.finance.presentation.utils.fontDimensionResource
 import com.finance.presentation.utils.getMonthNameFromLongDate
 
@@ -74,6 +83,25 @@ fun CategoriesScreen(
     val expensesReceiveState = viewModel._expensesReceiveState.collectAsState(
         TransitionUIState.Initial
     )
+
+    val expensesAmountOfMoney = remember {
+        derivedStateOf {
+            countAmountOfMoney(
+                selectedDateRange,
+                expensesReceiveState
+            )
+        }
+    }
+
+    val incomesAmountOfMoney = remember {
+        derivedStateOf {
+            countAmountOfMoney(
+                selectedDateRange,
+                incomesReceiveState
+            )
+        }
+    }
+
     val overallAmountOfMoney = remember {
         derivedStateOf {
             countAmountOfMoney(
@@ -178,60 +206,139 @@ fun CategoriesScreen(
             Surface(
                 modifier = Modifier
                     .fillMaxSize(),
-                color = Color.Transparent
+                color = shadow_5
             ) {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
                 ) {
-                    NavHost(
-                        navController = navController,
-                        startDestination = Screen.ExpensesIncomes.route
+                    Row(
+                        modifier = Modifier.padding(
+                            top = dimensionResource(id = R.dimen.offset_20),
+                            start = dimensionResource(id = R.dimen.offset_20),
+                            end = dimensionResource(id = R.dimen.offset_20)
+                        )
                     ) {
+                        Text(
+                            text = stringResource(id = R.string.label_month_budget),
+                            style = TextStyle(
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold))
+                            )
+                        )
 
-                        composable(
-                            route = Screen.ExpensesIncomes.route,
-                            enterTransition = {
-                                slideIntoContainer(
-                                    AnimatedContentTransitionScope.SlideDirection.Left,
-                                    animationSpec = tween(700)
+                        Text(
+                            modifier = Modifier.padding(start = dimensionResource(id = R.dimen.offset_20)),
+                            text = "$${incomesAmountOfMoney.value}",
+                            style = TextStyle(
+                                color = MaterialTheme.colorScheme.secondary,
+                                fontFamily = FontFamily(Font(resId = R.font.chakra_petch_medium_italic))
+                            )
+                        )
+                        Spacer(modifier = Modifier.weight(1f))
+                        Text(
+                            text = "${
+                                calculateExpensePercentage(
+                                    incomesAmountOfMoney.value,
+                                    expensesAmountOfMoney.value
+                                ).toInt()
+                            }%",
+                            style = TextStyle(
+                                color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold))
+                            )
+                        )
+                    }
+                    CustomProgressBar(
+                        outModifier = Modifier.padding(
+                            top = dimensionResource(id = R.dimen.offset_6),
+                            start = dimensionResource(id = R.dimen.offset_20),
+                            end = dimensionResource(id = R.dimen.offset_20)
+                        ),
+                        Modifier
+                            .clip(shape = RoundedCornerShape(dimensionResource(id = R.dimen.offset_20))),
+                        dimensionResource(id = R.dimen.offset_10),
+                        Color.Gray,
+                        Brush.horizontalGradient(
+                            listOf(
+                                MaterialTheme.colorScheme.surfaceTint,
+                                MaterialTheme.colorScheme.onSurface
+                            )
+                        ),
+                        calculateExpensePercentage(
+                            incomesAmountOfMoney.value,
+                            expensesAmountOfMoney.value
+                        ).toInt()
+                    )
+                    Column(
+                        modifier = Modifier
+                            .padding(top = dimensionResource(id = R.dimen.offset_20))
+                            .fillMaxSize()
+                            .shadow(
+                                dimensionResource(id = R.dimen.offset_62),
+                                shape = RoundedCornerShape(
+                                    topEnd = dimensionResource(id = R.dimen.offset_32),
+                                    topStart = dimensionResource(id = R.dimen.offset_32)
                                 )
-                            },
-                            exitTransition = {
-                                slideOutOfContainer(
-                                    AnimatedContentTransitionScope.SlideDirection.Right,
-                                    animationSpec = tween(700)
+                            )
+                            .clip(
+                                RoundedCornerShape(
+                                    topEnd = dimensionResource(id = R.dimen.offset_32),
+                                    topStart = dimensionResource(id = R.dimen.offset_32)
+                                )
+                            )
+                            .background(MaterialTheme.colorScheme.primaryContainer)
+
+                    ) {
+                        NavHost(
+                            navController = navController,
+                            startDestination = Screen.ExpensesIncomes.route
+                        ) {
+
+                            composable(
+                                route = Screen.ExpensesIncomes.route,
+                                enterTransition = {
+                                    slideIntoContainer(
+                                        AnimatedContentTransitionScope.SlideDirection.Left,
+                                        animationSpec = tween(700)
+                                    )
+                                },
+                                exitTransition = {
+                                    slideOutOfContainer(
+                                        AnimatedContentTransitionScope.SlideDirection.Right,
+                                        animationSpec = tween(700)
+                                    )
+                                }
+                            ) {
+                                ExpensesIncomesScreen(
+                                    navController,
+                                    viewModel
                                 )
                             }
-                        ) {
-                            ExpensesIncomesScreen(
-                                navController,
-                                viewModel
-                            )
-                        }
-                        composable(
-                            "${Screen.ExpensesLog.route}/{category}",
-                            arguments = listOf(navArgument("category") {
-                                type = NavType.StringType
-                            })
-                        ) { backStackEntry ->
-                            ExpenseLogScreen(
-                                navController,
-                                viewModel,
-                                backStackEntry.arguments?.getString("category")
-                            )
-                        }
-                        composable(
-                            "${Screen.IncomeLog.route}/{category}",
-                            arguments = listOf(navArgument("category") {
-                                type = NavType.StringType
-                            })
-                        ) { backStackEntry ->
-                            IncomeLogScreen(
-                                navController,
-                                viewModel,
-                                backStackEntry.arguments?.getString("category")
-                            )
+                            composable(
+                                "${Screen.ExpensesLog.route}/{category}",
+                                arguments = listOf(navArgument("category") {
+                                    type = NavType.StringType
+                                })
+                            ) { backStackEntry ->
+                                ExpenseLogScreen(
+                                    navController,
+                                    viewModel,
+                                    backStackEntry.arguments?.getString("category")
+                                )
+                            }
+                            composable(
+                                "${Screen.IncomeLog.route}/{category}",
+                                arguments = listOf(navArgument("category") {
+                                    type = NavType.StringType
+                                })
+                            ) { backStackEntry ->
+                                IncomeLogScreen(
+                                    navController,
+                                    viewModel,
+                                    backStackEntry.arguments?.getString("category")
+                                )
+                            }
                         }
                     }
                 }

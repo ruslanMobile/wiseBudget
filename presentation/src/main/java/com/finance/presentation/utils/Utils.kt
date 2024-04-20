@@ -30,3 +30,11 @@ fun isEmailValid(email: String): Boolean {
     val emailRegex = Regex("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}")
     return emailRegex.matches(email)
 }
+
+fun calculateExpensePercentage(income: Int, expenses: Int): Double {
+    return if (income != 0) {
+        (expenses.toDouble() / income.toDouble()) * 100
+    } else if (expenses != 0) {
+        100.0
+    } else 0.0
+}
