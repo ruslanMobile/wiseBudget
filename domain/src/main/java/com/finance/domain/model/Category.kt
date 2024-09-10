@@ -1,7 +1,7 @@
 package com.finance.domain.model
 
-data class Category(
-    val name: String,
-    val icon: Int,
-    var list: List<TransactionBase>? = null
+open class Category(
+    open val name: String,
+    open val icon: Int,
+    open var list: List<TransactionBase>? = null
 )

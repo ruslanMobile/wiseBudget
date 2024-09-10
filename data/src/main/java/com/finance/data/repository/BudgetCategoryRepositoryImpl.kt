@@ -1,12 +1,14 @@
 package com.finance.data.repository
 
 import com.finance.data.R
+import com.finance.domain.DEFAULT_CATEGORY_CREATE
 import com.finance.domain.DEFAULT_EXPENSES_CATEGORY_FAMILY
 import com.finance.domain.DEFAULT_EXPENSES_CATEGORY_HEALTH
 import com.finance.domain.DEFAULT_EXPENSES_CATEGORY_TRANSPORT
 import com.finance.domain.DEFAULT_INCOMES_CATEGORY_CRYPTO
 import com.finance.domain.DEFAULT_INCOMES_CATEGORY_SALARY
 import com.finance.domain.model.Category
+import com.finance.domain.model.CreateCategory
 import com.finance.domain.repository.BudgetCategoryRepository
 import javax.inject.Inject
 
@@ -34,6 +36,10 @@ val expensesCategories = listOf(
     ),
     Category(
         name = DEFAULT_EXPENSES_CATEGORY_TRANSPORT,
+        icon = R.drawable.ic_transport
+    ),
+    CreateCategory(
+        name = DEFAULT_CATEGORY_CREATE,
         icon = R.drawable.ic_transport
     )
 )

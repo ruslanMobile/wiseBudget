@@ -29,6 +29,12 @@
     <string name="label_google_auth_failed">Google authentication failed</string>
     <string name="label_field_is_empty">Field is empty</string>
     <string name="label_month_budget">Month budget</string>
+    <string name="label_add_new_category">Add new category</string>
+    <string name="label_category_name">Category Name</string>
+    <string name="label_common">Common</string>
+    <string name="label_food_and_drink">Food and drink</string>
+    <string name="label_health">Health</string>
+    <string name="label_shop">Shop</string>
 
     <string name="btn_login">login</string>
     <string name="btn_sign_up">sign up</string>

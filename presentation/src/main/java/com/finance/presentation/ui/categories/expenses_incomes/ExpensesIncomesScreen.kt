@@ -3,6 +3,7 @@ package com.finance.presentation.ui.categories.expenses_incomes
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -32,9 +33,15 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Paint
+import androidx.compose.ui.graphics.Path
+import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.DrawStyle
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,8 +50,10 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.finance.domain.model.CreateCategory
 import com.finance.presentation.R
 import com.finance.presentation.model.Screen
 import com.finance.presentation.ui.custom_ui.PagerLabel
@@ -143,69 +152,94 @@ fun ExpensesIncomesScreen(
                                             .fillMaxWidth()
                                             .height(dimensionResource(id = R.dimen.offset_62))
                                             .weight(5f)
-                                            .padding(horizontal = dimensionResource(id = R.dimen.offset_26))
+                                            .padding(
+                                                horizontal = dimensionResource(id = R.dimen.offset_26),
+                                                vertical = if (category is CreateCategory) dimensionResource(
+                                                    id = R.dimen.offset_6
+                                                ) else 0.dp
+                                            )
                                             .drawBehind {
-                                                drawLine(
-                                                    color = colorOnPrContainer,
-                                                    start = Offset(
-                                                        size.width / 5,
-                                                        size.height
-                                                    ),
-                                                    end = Offset(size.width, size.height),
-                                                    strokeWidth = bottomBorder,
-                                                    cap = StrokeCap.Round
-                                                )
+                                                if (category !is CreateCategory) {
+                                                    drawLine(
+                                                        color = colorOnPrContainer,
+                                                        start = Offset(
+                                                            size.width / 5,
+                                                            size.height
+                                                        ),
+                                                        end = Offset(size.width, size.height),
+                                                        strokeWidth = bottomBorder,
+                                                        cap = StrokeCap.Round
+                                                    )
+                                                }
                                             }
                                             .clickable {
-                                                navController.navigate("${Screen.ExpensesLog.route}/${category.name}")
+                                                if (category is CreateCategory) {
+                                                    navController.navigate("${Screen.CreateCategory.route}/expense")
+                                                } else {
+                                                    navController.navigate("${Screen.ExpensesLog.route}/${category.name}")
+                                                }
                                             },
                                         horizontalArrangement = Arrangement.SpaceBetween,
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
-                                        Row(
-                                            horizontalArrangement = Arrangement.Start,
-                                            modifier = Modifier.weight(1f)
-                                        ) {
-                                            Icon(
-                                                painter = painterResource(id = category.icon),
-                                                contentDescription = "",
-                                                tint = MaterialTheme.colorScheme.onPrimaryContainer,
-                                                modifier = Modifier
-                                                    .size(dimensionResource(id = R.dimen.offset_32))
-                                            )
-                                        }
-                                        Text(
-                                            text = category.name,
-                                            modifier = Modifier.weight(2f),
-                                            fontWeight = FontWeight(500),
-                                            style = TextStyle(
-                                                fontSize = fontDimensionResource(id = R.dimen.text_16),
-                                                color = MaterialTheme.colorScheme.onPrimaryContainer,
-                                                fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
-                                                textAlign = TextAlign.Start
-                                            ),
-                                        )
-
-                                        Column(
-                                            modifier = Modifier.weight(2f),
-                                            horizontalAlignment = Alignment.End,
-                                            verticalArrangement = Arrangement.Center
-                                        ) {
+                                        if (category !is CreateCategory) {
+                                            Row(
+                                                horizontalArrangement = Arrangement.Start,
+                                                modifier = Modifier.weight(1f)
+                                            ) {
+                                                Icon(
+                                                    painter = painterResource(id = category.icon),
+                                                    contentDescription = "",
+                                                    tint = MaterialTheme.colorScheme.onPrimaryContainer,
+                                                    modifier = Modifier
+                                                        .size(dimensionResource(id = R.dimen.offset_32))
+                                                )
+                                            }
                                             Text(
-                                                text = "$${category.list?.sumOf { it.amount ?: 0 }}",
+                                                text = category.name,
+                                                modifier = Modifier.weight(2f),
+                                                fontWeight = FontWeight(500),
                                                 style = TextStyle(
                                                     fontSize = fontDimensionResource(id = R.dimen.text_16),
                                                     color = MaterialTheme.colorScheme.onPrimaryContainer,
                                                     fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
-                                                )
+                                                    textAlign = TextAlign.Start
+                                                ),
                                             )
-                                            Text(
-                                                text = (category.list?.size ?: 0).toString(),
-                                                style = TextStyle(
-                                                    fontSize = fontDimensionResource(id = R.dimen.text_12),
-                                                    color = MaterialTheme.colorScheme.secondary,
-                                                    fontFamily = FontFamily(Font(resId = R.font.chakra_petch_medium)),
+
+                                            Column(
+                                                modifier = Modifier.weight(2f),
+                                                horizontalAlignment = Alignment.End,
+                                                verticalArrangement = Arrangement.Center
+                                            ) {
+                                                Text(
+                                                    text = "$${category.list?.sumOf { it.amount ?: 0 }}",
+                                                    style = TextStyle(
+                                                        fontSize = fontDimensionResource(id = R.dimen.text_16),
+                                                        color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                                        fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
+                                                    )
                                                 )
+                                                Text(
+                                                    text = (category.list?.size ?: 0).toString(),
+                                                    style = TextStyle(
+                                                        fontSize = fontDimensionResource(id = R.dimen.text_12),
+                                                        color = MaterialTheme.colorScheme.secondary,
+                                                        fontFamily = FontFamily(Font(resId = R.font.chakra_petch_medium)),
+                                                    )
+                                                )
+                                            }
+                                        } else {
+                                            Text(
+                                                text = category.name,
+                                                modifier = Modifier.fillMaxWidth(),
+                                                fontWeight = FontWeight(500),
+                                                style = TextStyle(
+                                                    fontSize = fontDimensionResource(id = R.dimen.text_16),
+                                                    color = MaterialTheme.colorScheme.onPrimaryContainer,
+                                                    fontFamily = FontFamily(Font(resId = R.font.chakra_petch_semi_bold)),
+                                                    textAlign = TextAlign.Center
+                                                ),
                                             )
                                         }
                                     }

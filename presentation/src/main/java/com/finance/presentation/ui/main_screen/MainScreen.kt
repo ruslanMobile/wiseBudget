@@ -33,6 +33,7 @@ import com.finance.presentation.R
 import com.finance.presentation.model.BottomNavItem
 import com.finance.presentation.model.Screen
 import com.finance.presentation.ui.categories.CategoriesScreen
+import com.finance.presentation.ui.categories.category_icon.ChooseCategoryIconScreen
 import com.finance.presentation.ui.profile.ProfileScreen
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -100,6 +101,9 @@ fun MainScreen(
             ) {
                 composable(Screen.Categories.route) {
                     CategoriesScreen(navController, hiltViewModel())
+                }
+                composable(Screen.ChooseCategoryIcon.route) {
+                    ChooseCategoryIconScreen()
                 }
 
                 composable(Screen.Profile.route) {

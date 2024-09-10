@@ -23,4 +23,8 @@ sealed class Screen(val route: String) : Parcelable {
     object ExpensesLog : Screen("expense_log")
     @Parcelize
     object IncomeLog : Screen("income_log")
+    @Parcelize
+    object CreateCategory : Screen("create_category")
+    @Parcelize
+    object ChooseCategoryIcon : Screen("choose_category_icon")
 }

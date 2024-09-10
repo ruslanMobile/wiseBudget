@@ -54,6 +54,7 @@ import androidx.navigation.navArgument
 import com.finance.domain.model.TransactionBase
 import com.finance.presentation.R
 import com.finance.presentation.model.Screen
+import com.finance.presentation.ui.categories.create_category.CreateCategoryScreen
 import com.finance.presentation.ui.categories.expense_log.ExpenseLogScreen
 import com.finance.presentation.ui.categories.expenses_incomes.ExpensesIncomesScreen
 import com.finance.presentation.ui.categories.expenses_incomes.MainScreenFrontPager
@@ -70,7 +71,7 @@ import com.finance.presentation.utils.getMonthNameFromLongDate
 )
 @Composable
 fun CategoriesScreen(
-    navController: NavHostController,
+    outNavController: NavHostController,
     viewModel: CategoriesVM = hiltViewModel()
 ) {
 
@@ -337,6 +338,19 @@ fun CategoriesScreen(
                                     navController,
                                     viewModel,
                                     backStackEntry.arguments?.getString("category")
+                                )
+                            }
+                            composable(
+                                "${Screen.CreateCategory.route}/{categoryType}",
+                                arguments = listOf(navArgument("categoryType") {
+                                    type = NavType.StringType
+                                })
+                            ) { backStackEntry ->
+                                CreateCategoryScreen(
+                                    outNavController,
+                                    navController,
+                                    hiltViewModel(),
+                                    backStackEntry.arguments?.getString("categoryType")
                                 )
                             }
                         }
